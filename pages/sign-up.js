@@ -29,14 +29,14 @@ export default function Signup() {
           {/* Logo and Title */}
           <div className="flex items-center gap-1">
             <div className="h-9 w-9 flex items-center justify-center rounded-full bg-[#F4F4F5] ">
-              <a href="https://botpress.com" target="_blank" rel="noopener noreferrer" className="">
+              <link href="https://botpress.com" target="_blank" rel="noopener noreferrer" className="">
               <Image
                 src="/images/IQ.png"
                 alt="traffiq Logo"
                 width={60}
                 height={60}
               />
-            </a>
+            </link>
             </div>
             <h2 className="text-2xl text-black font-poppins font-bold">Traff-IQ</h2>
           </div>
@@ -127,31 +127,31 @@ export default function Signup() {
             {/* Footer Links */}
             <p className="text-xs mb-2 font-poppins text-left mb-10 text-zinc-700 text-center">
               Already have an account?{" "}
-              <a
+              <link
                 href="/login"
                 className="text-blue-600 decoration-blue-600 hover:underline underline-offset-1"
               >
                 Login
-              </a>
+              </link>
             </p>
 
             <p className="text-xs mb-4 font-poppins tracking[0.1px] text-left text-zinc-700 ">
               By signing up, you agree to our{" "}
-              <a
+              <link
                 href="/essentials/#privacy-policy"
                 target="_blank"
                 className="text-primary font-medium text-blue-600 decoration-primary hover:underline underline-offset-1"
               >
                 Privacy Policy
-              </a>{" "}
+              </link>{" "}
               and{" "}
-              <a
+              <link
                 href="/essentials/#terms-conditions"
                 target="_blank"
                 className="text-primary font-medium text-blue-600 decoration-primary hover:underline underline-offset-1"
               >
                 Terms and Conditions
-              </a>.
+              </link>.
             </p>
 
             

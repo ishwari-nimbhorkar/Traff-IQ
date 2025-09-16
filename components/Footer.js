@@ -24,7 +24,7 @@ const Footer = () => {
               />
             </div>
             <p className="text-sm mb-4">
-             Delivers real-time route optimization, smart traffic signal control, and predictive congestion analysis. We're{" "}
+             Delivers real-time route optimization, smart traffic signal control, and predictive congestion analysis. We re{" "}
               <button
   onClick={() =>
     window.open(
@@ -38,7 +38,7 @@ const Footer = () => {
             </p>
             <div className="flex items-center space-x-8 py-2">
       {/* Facebook */}
-      <a
+      <link
         href="https://www.facebook.com/"
         target="_blank"
         rel="noopener noreferrer"
@@ -46,10 +46,10 @@ const Footer = () => {
         className="hover:text-blue-500 transition-colors"
       >
         <FontAwesomeIcon icon={faFacebookF} />
-      </a>
+      </link>
 
       {/* Instagram */}
-      <a
+      <link
         href="https://www.instagram.com"
         target="_blank"
         rel="noopener noreferrer"
@@ -57,10 +57,10 @@ const Footer = () => {
         className="hover:text-pink-500 transition-colors"
       >
         <FontAwesomeIcon icon={faInstagram} />
-      </a>
+      </link>
 
       {/* LinkedIn */}
-      <a
+      <link
         href="https://www.linkedin.com/in/"
         target="_blank"
         rel="noopener noreferrer"
@@ -68,17 +68,17 @@ const Footer = () => {
         className="hover:text-blue-400 transition-colors"
       >
         <FontAwesomeIcon icon={faLinkedinIn} />
-      </a>
+      </link>
                 
-              <a href="m/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="hover:text-primary transition-colors duration-200">
+              <link href="m/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="hover:text-primary transition-colors duration-200">
                 <i className="fab fa-facebook-f"></i>
-              </a>
-              <a href="/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="hover:text-primary transition-colors duration-200">
+              </link>
+              <link href="/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="hover:text-primary transition-colors duration-200">
                 <i className="fab fa-instagram"></i>
-              </a>
-              <a href="/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="hover:text-primary transition-colors duration-200">
+              </link>
+              <link href="/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="hover:text-primary transition-colors duration-200">
                 <i className="fab fa-linkedin-in"></i>
-              </a>
+              </link>
             </div>
           </div>
 
@@ -92,15 +92,15 @@ const Footer = () => {
               </div>
               <div className="flex">
                 <dt className="w-24 flex-none">Direct:</dt>
-                <dd><a href="tel:(000)000-0000">(000) 000-0000</a></dd>
+                <dd><link href="tel:(000)000-0000">(000) 000-0000</link></dd>
               </div>
               <div className="flex">
                 <dt className="w-24 flex-none">Office:</dt>
-                <dd><a href="tel:(111)111-1111">(111) 111-1111</a></dd>
+                <dd><link href="tel:(111)111-1111">(111) 111-1111</link></dd>
               </div>
               <div className="flex">
                 <dt className="w-24 flex-none">Email:</dt>
-                <dd><a href="mailto:contact@traffiq.ai">Contact@traffiq.ai</a></dd>
+                <dd><link href="mailto:contact@traffiq.ai">Contact@traffiq.ai</link></dd>
               </div>
             </dl>
           </div>
@@ -124,7 +124,7 @@ const Footer = () => {
               <li><Link href="/rules&laws/#laws" className="hover:underline">Law book</Link></li>
               <li><Link href="/rules&laws/#rules" className="hover:underline">Rule Book</Link></li>
               <li><Link href="/essentials/#about" className="hover:underline">About</Link></li>
-              <li><a href="/login" className="hover:underline">Sign In</a></li>
+              <li><link href="/login" className="hover:underline">Sign In</link></li>
             </ul>
           </div>
 
@@ -159,7 +159,7 @@ const Footer = () => {
           </ul>
           <p>
             © 2025 · Intelligence Traffic Management System · Website built by{" "}
-            <a href="/essentials/#about" target="_blank" className="font-bold hover:underline"> Traff IQ</a>
+            <link href="/essentials/#about" target="_blank" className="font-bold hover:underline"> Traff IQ</link>
           </p>
         </div>
       </div>

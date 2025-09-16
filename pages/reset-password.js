@@ -29,14 +29,14 @@ export default function Signup() {
           {/* Logo and Title */}
           <div className="flex items-center gap-1">
             <div className="h-9 w-9 flex items-center justify-center rounded-full bg-[#F4F4F5] ">
-              <a href="https://botpress.com" target="_blank" rel="noopener noreferrer" className="">
+              <link href="https://botpress.com" target="_blank" rel="noopener noreferrer" className="">
               <Image
                 src="/images/IQ.png"
                 alt="traffiq Logo"
                 width={60}
                 height={60}
               />
-            </a>
+            </link>
             </div>
             <h2 className="text-2xl text-black font-poppins font-bold">Traff-IQ</h2>
           </div>
@@ -119,23 +119,23 @@ export default function Signup() {
             </form>
             <p className="text-xs  mt-1 font-poppins    pr-1 mb-1 text-zinc-700 text-center">
               Remember password?{" "}
-              <a
+              <link
                 href="/login"
                 className="text-blue-600 decoration-blue-600 hover:underline underline-offset-1"
               >
                Login
-              </a>
+              </link>
             </p>
 
             {/* Footer Links */}
             <p className="text-xs  mt-2 font-poppins    pr-1 mb-10 text-zinc-700 text-center">
               New to Traff-IQ?{" "}
-              <a
+              <link
                 href="/sign-up"
                 className="text-blue-600 decoration-blue-600 hover:underline underline-offset-1"
               >
                 Sign up
-              </a>
+              </link>
             </p>
 
             
