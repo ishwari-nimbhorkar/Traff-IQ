@@ -1,7 +1,7 @@
 // components/TrafficCarousel.js
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 
 export default function TrafficCarousel() {
@@ -28,7 +28,7 @@ export default function TrafficCarousel() {
         "License Point System – A structured demerit system leading to suspension upon repeated violations.",
         "Data Privacy in Traffic Monitoring – Use of ANPR must comply with citizen privacy protections.",
       ],
-      img: "/images/enforcemnt  (3).png",
+      img: "/images/enforcemnt(3).png", // fixed extra spaces in filename
     },
     {
       heading: "Enforcement Handbook (Authority Guidelines)",
@@ -51,22 +51,23 @@ export default function TrafficCarousel() {
 
   const doubledSlides = [...slides, ...slides];
 
+  // Memoize next/prev functions (prevents re-renders)
+  const nextSlide = useCallback(() => {
+    setIsTransitioning(true);
+    setCurrent((prev) => prev + 1);
+  }, []);
+
+  const prevSlide = useCallback(() => {
+    setIsTransitioning(true);
+    setCurrent((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
+  }, [slides.length]);
+
   // Auto-slide with pause on hover
   useEffect(() => {
     if (isHovered) return;
     const timer = setInterval(nextSlide, 5000);
     return () => clearInterval(timer);
-  }, [isHovered]);
-
-  const nextSlide = () => {
-    setIsTransitioning(true);
-    setCurrent((prev) => prev + 1);
-  };
-
-  const prevSlide = () => {
-    setIsTransitioning(true);
-    setCurrent((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
-  };
+  }, [isHovered, nextSlide]);
 
   // Reset when reaching end
   useEffect(() => {
@@ -80,7 +81,7 @@ export default function TrafficCarousel() {
   }, [current, slides.length]);
 
   return (
-    <section className="w-full bg-center bg-cover mt-[-50px] py-12 px-5 md:px-12 tracking-[0.1px] font-poppins">
+    <section className="w-full bg-center bg-cover -mt-12 py-12 px-5 md:px-12 tracking-[0.1px] font-poppins">
       <div className="container mx-auto">
         {/* Section Heading */}
         <div className="mb-16 text-left">
@@ -110,7 +111,7 @@ export default function TrafficCarousel() {
           >
             {doubledSlides.map((slide, i) => (
               <div
-                key={i}
+                key={`${slide.heading}-${i}`}
                 className="min-w-full shrink-0 px-4"
                 role="group"
                 aria-roledescription="slide"
@@ -124,7 +125,7 @@ export default function TrafficCarousel() {
                       </h3>
                       <ul className="list-disc list-inside space-y-2 text-base md:text-[14.5px]">
                         {slide.points.map((point, idx) => (
-                          <li key={idx} className="leading-relaxed">
+                          <li key={`${slide.heading}-point-${idx}`} className="leading-relaxed">
                             {point}
                           </li>
                         ))}
@@ -138,6 +139,7 @@ export default function TrafficCarousel() {
                       src={slide.img}
                       alt={slide.heading}
                       fill
+                      priority={i === 0} // prioritize first image only
                       className="object-cover rounded-2xl"
                     />
                   </div>
@@ -147,7 +149,7 @@ export default function TrafficCarousel() {
           </div>
 
           {/* Controls */}
-          <div className="flex px-9 gap-9 mt-10">
+          <div className="flex gap-9 mt-10 px-9">
             <button
               onClick={prevSlide}
               className="inline-flex items-center justify-center h-10 w-10 rounded-full bg-gray-100 hover:bg-gray-300 transition-colors"

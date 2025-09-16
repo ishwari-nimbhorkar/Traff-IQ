@@ -1,11 +1,15 @@
 @import "tailwindcss/preflight";
 @tailwind utilities;
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');  
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&family=Poppins:wght@400;500;600;700&display=swap");
 
+/* Root variables */
 :root {
   --background: #ffffff;
   --foreground: #ffffff;
+}
+body {
+  cursor: none;
 }
 
 @theme inline {
@@ -22,6 +26,7 @@
   }
 }
 
+/* Local fonts */
 @font-face {
   font-family: "cy-grotesk";
   src: url("/fonts/buzan-cy-grotesk-grand-dark.ttf") format("truetype");
@@ -32,75 +37,47 @@
 @font-face {
   font-family: "cy-grotesk";
   src: url("/fonts/cy-grotesk-wide.ttf") format("truetype");
-  font-weight: 700; 
+  font-weight: 700;
   font-style: normal;
 }
 
+/* Base styles */
 body {
   background: var(--background);
   color: var(--foreground);
 }
 
+/* Utility font classes */
 .font-poppins {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 .font-montserrat {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 
+/* Placeholder font */
 input::placeholder,
 textarea::placeholder {
-   font-family: 'Poppins', sans-serif;
-}
-h1  {
-  font-family: 'cy-grotesk', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
-h2  {
-  font-family: 'cy-grotesk', sans-serif;
+/* Headings */
+h1,
+h2 {
+  font-family: "cy-grotesk", sans-serif;
 }
 
-
-h2 + p {
-  font-family: 'Poppins', sans-serif;
-}
-
-
-h2 + p + p {
-  font-family: 'Poppins', sans-serif;
-}
-
-h3 + p {
-  font-family: 'Poppins', sans-serif;
-}
-div + h3{
-  font-family: 'Poppins', sans-serif;
-}
-div + span {
-  font-family: 'Poppins', sans-serif;
-}
-
-div + div + p + strong + link {
-  font-family: 'Poppins', sans-serif;
-}
-
-div + div + link + p {
-  font-family: 'Poppins', sans-serif;
-}
-
-
-span { 
-  font-family: 'Poppins', sans-serif;
-}
-nav {
-  font-family: 'Poppins', sans-serif;
-}
-
-
-
+/* Paragraphs + nav + footer + spans */
+h2 + p,
+h2 + p + p,
+h3 + p,
+div + h3,
+div + span,
+div + div + p + strong + link,
+div + div + link + p,
+span,
+nav,
 footer {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
- 
-

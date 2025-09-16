@@ -7,24 +7,19 @@ export default function MobileWarning() {
 
   useEffect(() => {
     const checkMobile = () => {
-      if (window.innerWidth < 768 || /Mobi|Android/i.test(navigator.userAgent)) {
-        setIsMobile(true);
-      } else {
-        setIsMobile(false);
-      }
+      setIsMobile(window.innerWidth < 768 || /Mobi|Android/i.test(navigator.userAgent));
     };
 
     checkMobile();
     window.addEventListener("resize", checkMobile);
-
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   const handleContinue = () => {
     setDismissed(true);
 
-    // Force "desktop-like" rendering by changing viewport meta
-    let viewport = document.querySelector("meta[name=viewport]");
+    // Force "desktop-like" rendering by updating viewport
+    const viewport = document.querySelector("meta[name=viewport]");
     if (viewport) {
       viewport.setAttribute(
         "content",
@@ -36,36 +31,33 @@ export default function MobileWarning() {
   if (!isMobile || dismissed) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-lg max-w-sm w-full p-6 text-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
+      <div className="max-w-sm w-full p-6 bg-white rounded-lg shadow-lg text-center">
         <h2 className="text-lg font-semibold text-gray-800">
           Mobile Experience Limited
         </h2>
-        <p className="mt-2 text-sm pb-6 text-gray-600">
+        <p className="mt-2 mb-6 text-sm text-gray-600">
           Our website is not fully optimized for mobile yet.
           <br />
           For the best experience, please switch to <b>Desktop Mode</b>.
         </p>
         <button
           onClick={handleContinue}
-           className=" sticky-target inline-flex tracking-[0.1px] items-center gap-2 rounded-full text-sm bg-black text-white px-6 py-3 hover:bg-black-600"
+          className="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium text-white bg-black rounded-full hover:bg-gray-800 transition-colors"
         >
-          Continue Anyway<svg 
-            width="12" 
-            height="12" 
-            viewBox="0 0 12 12" 
-            fill="none" 
+          Continue Anyway
+          <svg
+            className="w-3 h-3 text-white"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            viewBox="0 0 12 12"
             xmlns="http://www.w3.org/2000/svg"
-            className="text-white"
           >
-            <path 
-              d="M1 11L11 1M11 1H1M11 1V11" 
-              stroke="currentColor" 
-              strokeWidth="1.5" 
-              strokeLinecap="round" 
-              strokeLinejoin="round"
-            />
-            </svg>
+            <path d="M1 11L11 1M11 1H1M11 1V11" />
+          </svg>
         </button>
       </div>
     </div>

@@ -1,18 +1,22 @@
 // app/laws/page.js
 "use client";
 
-import React from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CustomCursor from "@/components/CustomCursor";
 import { Poppins } from "next/font/google";
+import dynamic from "next/dynamic";
+
+// ✅ Dynamically import heavy/interactive components
+const CustomCursorDynamic = dynamic(() => import("@/components/CustomCursor"), { ssr: false });
 
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["400", "600", "700"],
-  display: "swap",
+  display: "swap", // prevents layout shift
 });
 
+// ✅ Moved static data outside component (no re-creation on re-renders)
 const trafficRules = [
   "Vehicles carrying hazardous materials must display reflective hazard warning plates (as per ADR standards) and drivers must hold special endorsements on their license.",
   "Heavy vehicles are legally required to maintain a minimum 50-meter safe following distance at speeds above 40 km/h on highways, irrespective of traffic density.",
@@ -39,30 +43,29 @@ const trafficLaws = [
   "Section 177A: Electronic enforcement (CCTV, ANPR cameras) challans carry the same legal weight as physical challans; tampering with e-challan records is punishable by imprisonment.",
 ];
 
+// ✅ Main Page Component
 export default function LawsPage() {
   return (
     <div className={poppins.className}>
       <Navbar />
 
-      <section
+      <main
         id="lawsPage"
-        className="w-full py-20"
-        style={{
-          backgroundColor: "#f6f6f6",
-          backgroundPosition: "center",
-          backgroundSize: "cover",
-        }}
+        className="w-full py-20 bg-[#f6f6f6] bg-center bg-cover"
       >
         <div className="text-black container mx-auto">
           <div className="mx-auto max-w-5xl px-6 sm:p-0">
             {/* Title */}
             <h1 className="text-4xl mt-10 font-bold text-center leading-tight mb-10">
-              Digital Rule & Law Book – <span className="text-black">Traff IQ</span>
+              Digital Rule & Law Book –{" "}
+              <span className="text-black">Traff IQ</span>
             </h1>
 
             {/* Rules Section */}
-            <div id="rules" className="my-16">
-              <h2 className="text-2xl font-semibold text-center mb-8">Traffic Rules</h2>
+            <section id="rules" className="my-16">
+              <h2 className="text-2xl font-semibold text-center mb-8">
+                Traffic Rules
+              </h2>
               <p className="text-gray-600 text-center max-w-3xl mx-auto mb-8">
                 Below are detailed professional traffic rules that govern everyday road usage,
                 designed for safe, disciplined, and lawful driving. These are less commonly known
@@ -73,11 +76,13 @@ export default function LawsPage() {
                   <Card key={`rule-${idx}`} title={rule} />
                 ))}
               </div>
-            </div>
+            </section>
 
             {/* Laws Section */}
-            <div id="laws" className="my-16">
-              <h2 className="text-2xl font-semibold text-center mb-8">Traffic Laws</h2>
+            <section id="laws" className="my-16">
+              <h2 className="text-2xl font-semibold text-center mb-8">
+                Traffic Laws
+              </h2>
               <p className="text-gray-600 text-center max-w-3xl mx-auto mb-8">
                 These laws are derived from the Motor Vehicles Act and Central Motor Vehicle Rules,
                 and carry legal and financial consequences if violated.
@@ -87,21 +92,21 @@ export default function LawsPage() {
                   <Card key={`law-${idx}`} title={law} />
                 ))}
               </div>
-            </div>
+            </section>
           </div>
         </div>
-      </section>
+      </main>
 
       <Footer />
-      <CustomCursor />
+      <CustomCursorDynamic />
     </div>
   );
 }
 
-/* --- Small Card component --- */
+/* --- Reusable Card Component --- */
 function Card({ title }) {
   return (
-    <div className="bg-white shadow-md rounded-2xl p-5 hover:shadow-lg transition-transform transform hover:-translate-y-1">
+    <article className="bg-white shadow-md rounded-2xl p-5 hover:shadow-lg transition-transform hover:-translate-y-1">
       <div className="flex items-start gap-4">
         <span className="mt-1" aria-hidden>
           <svg
@@ -123,6 +128,6 @@ function Card({ title }) {
         </span>
         <p className="text-gray-700">{title}</p>
       </div>
-    </div>
+    </article>
   );
 }

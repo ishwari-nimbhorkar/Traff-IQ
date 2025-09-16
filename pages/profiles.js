@@ -1,189 +1,168 @@
 // app/essential/page.js
 "use client";
 
-import Link from "next/link";
+import dynamic from "next/dynamic";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import CustomCursor from "@/components/CustomCursor";
+
+// Lazy-load Custom Cursor (not critical for page load)
+const CustomCursor = dynamic(() => import("@/components/CustomCursor"), {
+  ssr: false,
+});
 
 export default function EssentialPage() {
   return (
     <>
-      <Navbar />
-      <section
+      <header>
+        <Navbar />
+      </header>
+
+      <main
         id="essentialPage"
-        className="w-full py-20"
-        style={{
-          backgroundColor: "#f6f6f6",
-          backgroundPosition: "center",
-          backgroundSize: "cover",
-        }}
+        className="w-full py-20 bg-[#f6f6f6] bg-center bg-cover text-black"
       >
-        <div className="text-black container mx-auto">
-          <div className="mx-auto max-w-5xl px-6 sm:p-0 ">
+        <div className="container mx-auto">
+          <div className="mx-auto max-w-5xl px-6 sm:p-0">
             {/* Project Title */}
             <h1 className="text-4xl mt-10 font-bold text-center leading-tight mb-10">
-              Team Structure & Roles for Traffic IQ 
+              Team Structure & Roles for Traffic IQ
             </h1>
 
             {/* About Section */}
-            <div id="about" className=" text-center my-16">
+            <section id="about" className="text-center my-16">
               <h2 className="text-2xl font-semibold mb-4">About Traff IQ</h2>
               <p className="text-gray-600 leading-relaxed">
-                <b>Traff IQ </b>is an{" "}
-                <b>AI-powered traffic control and management system </b>designed
-                to revolutionize urban mobility. Leveraging cutting-edge
-                artificial intelligence and real-time data analytics, Traff IQ
-                empowers traffic management authorities and citizens alike to
-                optimize traffic flow, reduce congestion, and enhance road
-                safety.
+                <b>Traff IQ</b> is an{" "}
+                <b>AI-powered traffic control and management system</b> designed
+                to revolutionize urban mobility. Leveraging cutting-edge AI and
+                real-time data analytics, Traff IQ empowers traffic management
+                authorities and citizens alike to optimize traffic flow, reduce
+                congestion, and enhance road safety.
               </p>
 
               <p className="text-gray-600 leading-relaxed">
                 By providing intelligent insights, predictive traffic patterns,
                 and adaptive control solutions, Traff IQ enables cities to
-                respond dynamically to changing traffic conditions. Our mission
-                is to create smarter, safer, and more efficient urban
-                environments, giving people the freedom to move seamlessly
-                through the city while supporting authorities with data-driven
-                decision-making.
+                respond dynamically to changing traffic conditions.
               </p>
 
-              <p className="text-gray-600 text-[17px] font-poppins leading-relaxed">
+              <p className="text-gray-600 text-lg font-medium leading-relaxed font-poppins">
                 Traff IQ: powering the future of urban mobility.
               </p>
-            </div>
+            </section>
 
             <hr className="border-gray-300 my-12" />
 
-            {/* Team Structure & Roles */}
-            <div id="team" className="text-center my-16">
-              <h2 className="text-2xl font-semibold mb-4">
-             Team Lead
-              </h2>
+            {/* Team Section */}
+            <section id="team" className="text-center my-16">
+              <h2 className="text-2xl font-semibold mb-4">Team Lead</h2>
 
               {/* Leadership */}
               <div className="my-10 text-left">
-               
-                <h2 className="text-gray-800 text-xl mb-2">
-                  <b>Ishwari Nimbhorkar </b>
-                </h2>
+                <h3 className="text-gray-800 text-xl mb-2 font-bold">
+                  Ishwari Nimbhorkar
+                </h3>
                 <p className="text-gray-600 mb-4">
-                 The driving force behind Traff IQ, Ishwari architects the entire system from frontend design to backend logic and database strategy. She not only sets the vision but also provides the roadmap, coding standards, and workflows the entire team follows. Every component, feature, and integration stems from her guidance, while the rest of the team executes her directions to bring her blueprint to Project.
+                  The driving force behind Traff IQ, Ishwari architects the
+                  entire system from frontend design to backend logic and
+                  database strategy. She not only sets the vision but also
+                  provides the roadmap, coding standards, and workflows the
+                  entire team follows.
                 </p>
               </div>
+
               <hr className="border-gray-300 my-8" />
 
               {/* Frontend */}
               <div className="my-10 text-left">
-                <h4 className="text-xl text-gray-700 font-bold mb-3">
+                <h3 className="text-xl text-gray-700 font-bold mb-3">
                   Frontend Team (Next.js + UI/UX)
-                </h4>
+                </h3>
                 <p className="text-gray-600 mb-4">
                   Goal: Build an interactive, responsive, and accessible user
                   interface for citizens and authorities.
                 </p>
-                <ul className="list-disc list-inside text-gray-600">
-                  <li className="mb-2">
+                <ul className="list-disc list-inside text-gray-600 space-y-2">
+                  <li>
                     <b>Shrutika – UI/UX & Styling:</b> Designs modern,
-                    user-friendly layouts using TailwindCSS. Ensures color
-                    schemes, fonts, and components align with brand identity.
-                    Works closely with backend to ensure proper API integration
-                    in the UI.
+                    user-friendly layouts using TailwindCSS.
                   </li>
-                  <li className="mb-2">
-                    <b>Rupal – React Component :</b> Develops reusable
-                    Next.js components (navbar, footer, cards, dashboard
-                    widgets). Handles routing between pages (User Dashboard,
-                    Authority Dashboard, E-Challan, Reports). Ensures responsive
-                    design for mobile and desktop.
+                  <li>
+                    <b>Rupal – React Component:</b> Develops reusable Next.js
+                    components (navbar, footer, cards, dashboards).
                   </li>
-                  <li className="mb-2">
+                  <li>
                     <b>Ruchika – Frontend State & API Integration:</b> Manages
-                    client-side state using React hooks / Context API. Connects
-                    frontend pages with backend APIs (live traffic, violations,
-                    challans). Implements loading states, error handling, and
-                    smooth navigation.
+                    client-side state & connects frontend with backend APIs.
                   </li>
-                  <li className="mb-2">
-                    <b>Sumit – Testing & Accessibility :</b> Focuses on
-                    QA for frontend: tests responsiveness, accessibility (WCAG
-                    standards). Creates test cases for UI workflows (login,
-                    challan check, reporting violations). Ensures cross-browser
-                    compatibility (Chrome, Firefox, Edge, Safari).
+                  <li>
+                    <b>Sumit – Testing & Accessibility:</b> QA for frontend
+                    responsiveness and WCAG standards.
                   </li>
                 </ul>
               </div>
+
               <hr className="border-gray-300 my-8" />
 
               {/* Backend */}
               <div className="my-10 text-left">
-                <h4 className="text-xl text-gray-700 font-bold mb-3">
+                <h3 className="text-xl text-gray-700 font-bold mb-3">
                   Backend Team (APIs, Authentication, Business Logic)
-                </h4>
+                </h3>
                 <p className="text-gray-600 mb-4">
-                  Goal: Develop secure APIs, logic for traffic management, and
-                  authority tools.
+                  Goal: Develop secure APIs, traffic logic, and authority tools.
                 </p>
-                <ul className="list-disc list-inside text-gray-600">
-                  <li className="mb-2">
-                    <b>Somal – Backend Lead (APIs & Authentication):</b> Builds
-                    core backend using Next.js API routes. Implements user &
-                    authority authentication (JWT/session). Designs role-based
-                    access (User vs Authority).
+                <ul className="list-disc list-inside text-gray-600 space-y-2">
+                  <li>
+                    <b>Somal – Backend Lead:</b> Builds core backend APIs with
+                    authentication & role-based access.
                   </li>
-                  <li className="mb-2">
-                    <b>Pranav – Traffic Logic & AI Features:</b> Works on
-                    AI-powered route suggestions & traffic optimization APIs.
-                    Integrates third-party traffic data APIs (Google Maps, GPS).
-                    Optimizes backend logic for fast response times.
+                  <li>
+                    <b>Pranav – Traffic Logic & AI:</b> Works on AI-powered
+                    route suggestions & optimizations.
                   </li>
-                  <li className="mb-2">
-                    <b>Rupesh – E-Challan & Violation System :</b>{" "}
-                    Creates backend services for challan generation & violation
-                    records. Connects with MongoDB collections for fines & user
-                    history. Works with Rupal & Ruchika to show challans on UI.
+                  <li>
+                    <b>Rupesh – E-Challan System:</b> Backend for challan
+                    generation & violation tracking.
                   </li>
                 </ul>
               </div>
+
               <hr className="border-gray-300 my-8" />
 
-              {/* Data/Database */}
+              {/* Database */}
               <div className="my-10 text-left">
-                <h4 className="text-xl  text-gray-700 font-bold mb-3">
+                <h3 className="text-xl text-gray-700 font-bold mb-3">
                   Data/Database Team (MongoDB + Analytics)
-                </h4>
+                </h3>
                 <p className="text-gray-600 mb-4">
                   Goal: Manage database schemas, queries, analytics, and
                   reports.
                 </p>
-                <ul className="list-disc list-inside text-gray-600">
-                  <li className="mb-2">
-                    <b>Sandip – Database Schema :</b> Designs MongoDB
-                    schema (users, vehicles, challans, reports, traffic data).
-                    Sets up indexing for fast queries (live updates, searching
-                    challans). Works closely with backend team for CRUD
-                    operations.
+                <ul className="list-disc list-inside text-gray-600 space-y-2">
+                  <li>
+                    <b>Sandip – Database Schema:</b> Designs MongoDB schema and
+                    optimizes queries.
                   </li>
-                  <li className="mb-2">
-                    <b>Rushikesh – Data Analyst & Insights :</b>{" "}
-                    Develops analytics dashboards for authorities (violations
-                    trends, accident hotspots). Prepares compliance & audit
-                    reports. Works with Pranav to improve AI with historical
-                    traffic data.
+                  <li>
+                    <b>Rushikesh – Data Analyst & Insights:</b> Builds
+                    analytics dashboards & supports AI with traffic data.
                   </li>
                 </ul>
-                              <hr className="border-gray-300 my-8" />
-
-                <p className="text-gray-600 font-poppins font-medium text-2xl mt-10  text-center mb-4">
-                  Thank you!    
-                </p>
               </div>
-            </div>
+
+              <p className="text-gray-600 font-poppins font-medium text-2xl mt-10 text-center mb-4">
+                Thank you!
+              </p>
+            </section>
           </div>
         </div>
-      </section>
-      <Footer />
+      </main>
+
+      <footer>
+        <Footer />
+      </footer>
+
       <CustomCursor />
     </>
   );

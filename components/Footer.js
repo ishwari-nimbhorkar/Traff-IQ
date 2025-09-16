@@ -1,10 +1,9 @@
-// components/Footer.js
-import React from "react";
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFacebookF, faInstagram, faLinkedinIn } from "@fortawesome/free-brands-svg-icons";
-
 
 const Footer = () => {
   return (
@@ -20,65 +19,34 @@ const Footer = () => {
                 alt="Traffic IQ"
                 width={240}
                 height={50}
-                className="transform -translate-x-7"
+                className="-translate-x-7"
+                priority
               />
             </div>
             <p className="text-sm mb-4">
-             Delivers real-time route optimization, smart traffic signal control, and predictive congestion analysis. We re{" "}
-              <button
-  onClick={() =>
-    window.open(
-      "https://www.google.com/maps/search/P.+R.+Pote+Patil+College+of+Engineering+and+Management,+Pote+Estate,+Kathora+Rd,+Amravati,+Maharashtra+444604/",
-      "_blank"
-    )
-  } className="font-extrabold hover:underline">
+              Delivers real-time route optimization, smart traffic signal control, and predictive congestion analysis. 
+              We are{" "}
+              <Link
+                href="https://www.google.com/maps/search/P.+R.+Pote+Patil+College+of+Engineering+and+Management,+Pote+Estate,+Kathora+Rd,+Amravati,+Maharashtra+444604/"
+                target="_blank"
+                className="font-extrabold hover:underline"
+              >
                 Connected to the heart of Indians
-              </button>
+              </Link>
               . Empowering cities with data-driven insights for smarter mobility.
             </p>
-            <div className="flex items-center space-x-8 py-2">
-      {/* Facebook */}
-      <link
-        href="https://www.facebook.com/"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Facebook"
-        className="hover:text-blue-500 transition-colors"
-      >
-        <FontAwesomeIcon icon={faFacebookF} />
-      </link>
 
-      {/* Instagram */}
-      <link
-        href="https://www.instagram.com"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Instagram"
-        className="hover:text-pink-500 transition-colors"
-      >
-        <FontAwesomeIcon icon={faInstagram} />
-      </link>
-
-      {/* LinkedIn */}
-      <link
-        href="https://www.linkedin.com/in/"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="LinkedIn"
-        className="hover:text-blue-400 transition-colors"
-      >
-        <FontAwesomeIcon icon={faLinkedinIn} />
-      </link>
-                
-              <link href="m/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="hover:text-primary transition-colors duration-200">
-                <i className="fab fa-facebook-f"></i>
-              </link>
-              <link href="/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="hover:text-primary transition-colors duration-200">
-                <i className="fab fa-instagram"></i>
-              </link>
-              <link href="/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="hover:text-primary transition-colors duration-200">
-                <i className="fab fa-linkedin-in"></i>
-              </link>
+            {/* Social Icons */}
+            <div className="flex items-center space-x-8 py-2 text-lg">
+              <Link href="https://www.facebook.com/" target="_blank" aria-label="Facebook" className="hover:text-blue-500 transition-colors">
+                <FontAwesomeIcon icon={faFacebookF} />
+              </Link>
+              <Link href="https://www.instagram.com" target="_blank" aria-label="Instagram" className="hover:text-pink-500 transition-colors">
+                <FontAwesomeIcon icon={faInstagram} />
+              </Link>
+              <Link href="https://www.linkedin.com/in/" target="_blank" aria-label="LinkedIn" className="hover:text-blue-400 transition-colors">
+                <FontAwesomeIcon icon={faLinkedinIn} />
+              </Link>
             </div>
           </div>
 
@@ -88,19 +56,19 @@ const Footer = () => {
             <dl className="space-y-4 text-sm leading-6">
               <div className="flex">
                 <dt className="w-24 flex-none">Address:</dt>
-                <dd>Pote Estate, Kathora Road, Amravati, 444602, Maharashtra, India. </dd>
+                <dd>Pote Estate, Kathora Road, Amravati, 444602, Maharashtra, India</dd>
               </div>
               <div className="flex">
                 <dt className="w-24 flex-none">Direct:</dt>
-                <dd><link href="tel:(000)000-0000">(000) 000-0000</link></dd>
+                <dd><Link href="tel:(000)000-0000">(000) 000-0000</Link></dd>
               </div>
               <div className="flex">
                 <dt className="w-24 flex-none">Office:</dt>
-                <dd><link href="tel:(111)111-1111">(111) 111-1111</link></dd>
+                <dd><Link href="tel:(111)111-1111">(111) 111-1111</Link></dd>
               </div>
               <div className="flex">
                 <dt className="w-24 flex-none">Email:</dt>
-                <dd><link href="mailto:contact@traffiq.ai">Contact@traffiq.ai</link></dd>
+                <dd><Link href="mailto:contact@traffiq.ai">contact@traffiq.ai</Link></dd>
               </div>
             </dl>
           </div>
@@ -110,10 +78,10 @@ const Footer = () => {
             <h3 className="font-semibold mb-4 text-white">Services</h3>
             <ul className="space-y-2 text-sm">
               <li><Link href="/" className="hover:underline">All Services</Link></li>
-              <li><Link href="/" className="hover:underline"> Traffic Data Collection & Reporting</Link></li>
-              <li><Link href="/" className="hover:underline"> Congestion & Route Optimization</Link></li>
-              <li><Link href="/" className="hover:underline"> Road Safety Systems</Link></li>
-              <li><Link href="/" className="hover:underline"> Citizen Information Systems</Link></li>
+              <li><Link href="/" className="hover:underline">Traffic Data Collection & Reporting</Link></li>
+              <li><Link href="/" className="hover:underline">Congestion & Route Optimization</Link></li>
+              <li><Link href="/" className="hover:underline">Road Safety Systems</Link></li>
+              <li><Link href="/" className="hover:underline">Citizen Information Systems</Link></li>
             </ul>
           </div>
 
@@ -124,7 +92,7 @@ const Footer = () => {
               <li><Link href="/rules&laws/#laws" className="hover:underline">Law book</Link></li>
               <li><Link href="/rules&laws/#rules" className="hover:underline">Rule Book</Link></li>
               <li><Link href="/essentials/#about" className="hover:underline">About</Link></li>
-              <li><link href="/login" className="hover:underline">Sign In</link></li>
+              <li><Link href="/login" className="hover:underline">Sign In</Link></li>
             </ul>
           </div>
 
@@ -135,7 +103,7 @@ const Footer = () => {
           <p className="text-white text-lg">Need Help?</p>
           <Link href="/essentials/#help" className="flex items-center gap-2 rounded-full px-4 py-2 border border-white text-white hover:bg-white hover:text-black transition-colors">
             Contact Us
-           <svg
+            <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 640 640"
               className="w-6 h-6 fill-current rotate-321"
@@ -159,7 +127,9 @@ const Footer = () => {
           </ul>
           <p>
             © 2025 · Intelligence Traffic Management System · Website built by{" "}
-            <link href="/essentials/#about" target="_blank" className="font-bold hover:underline"> Traff IQ</link>
+            <Link href="/essentials/#about" target="_blank" className="font-bold hover:underline">
+              Traff IQ
+            </Link>
           </p>
         </div>
       </div>
@@ -168,4 +138,3 @@ const Footer = () => {
 };
 
 export default Footer;
-

@@ -1,8 +1,6 @@
-// app/essential/page.js
 "use client";
 
 import React from "react";
-import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CustomCursor from "@/components/CustomCursor";
@@ -68,80 +66,68 @@ export default function EssentialPage() {
     <div className={poppins.className}>
       <Navbar />
 
-      <section
-        id="essentialPage"
-        className="w-full py-20"
-        style={{
-          backgroundColor: "#f6f6f6",
-          backgroundPosition: "center",
-          backgroundSize: "cover",
-        }}
-      >
-        <div className="text-black container mx-auto">
-          <div className="mx-auto max-w-5xl px-6 sm:p-0">
-            {/* Project Title */}
-            <h1 className="text-4xl mt-10 font-bold text-center leading-tight mb-10">
-              Essential Information – <span className="text-black">Traff IQ</span>
-            </h1>
+      <main className="bg-gray-100 bg-center bg-cover w-full py-20">
+        <div className="container mx-auto px-6 max-w-5xl">
 
-            {/* About Section */}
-            <div id="about" className="text-center my-16">
-              <h2 className="text-2xl font-semibold mb-4">About Traff IQ</h2>
-              <p className="text-gray-600 leading-relaxed mb-4">
-                <strong>Traff IQ</strong> is an <strong>AI-powered traffic control and management system</strong> designed to revolutionize urban mobility. Leveraging AI and real-time analytics, Traff IQ helps authorities and citizens optimize flow, reduce congestion, and improve road safety.
-              </p>
+          {/* Page Title */}
+          <h1 className="text-4xl font-bold text-black text-center mb-16">
+            Essential Information – <span className="text-black">Traff IQ</span>
+          </h1>
 
-              <p className="text-gray-600 leading-relaxed mb-2">
-                By providing predictive patterns and adaptive control solutions, Traff IQ enables cities to respond dynamically to changing traffic conditions and make smarter, safer mobility decisions.
-              </p>
+          {/* About Section */}
+          <section id="about" className="text-center mb-16">
+            <h2 className="text-2xl text-black font-semibold mb-4">About Traff IQ</h2>
+            <p className="text-gray-600 leading-relaxed mb-4">
+              <strong>Traff IQ</strong> is an <strong>AI-powered traffic control and management system</strong> designed to revolutionize urban mobility. Leveraging AI and real-time analytics, Traff IQ helps authorities and citizens optimize flow, reduce congestion, and improve road safety.
+            </p>
+            <p className="text-gray-600 leading-relaxed mb-2">
+              By providing predictive patterns and adaptive control solutions, Traff IQ enables cities to respond dynamically to changing traffic conditions and make smarter, safer mobility decisions.
+            </p>
+            <p className="text-gray-600 text-lg leading-relaxed">
+              Traff IQ: powering the future of urban mobility.
+            </p>
+          </section>
 
-              <p className="text-gray-600 text-[17px] leading-relaxed">
-                Traff IQ: powering the future of urban mobility.
-              </p>
+          {/* Features Section */}
+          <section id="features" className="mb-16">
+            <h2 className="text-2xl font-semibold text-gray-800 text-center mb-8">Key Features</h2>
+
+            <h3 className="text-xl font-semibold text-gray-700 mb-4">For Users</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+              {userFeatures.map((item, idx) => (
+                <Card key={`uf-${idx}`} title={item} />
+              ))}
             </div>
 
-            {/* Features Section */}
-            <div id="features" className="my-16">
-              <h2 className="text-2xl font-semibold text-center mb-8">Key Features</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {userFeatures.map((item, idx) => (
-                  <Card key={`uf-${idx}`} title={item} />
-                ))}
+            <h3 className="text-xl font-semibold text-gray-700 mb-4">For Authorities</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {authorityFeatures.map((item, idx) => (
+                <Card key={`af-${idx}`} title={item} />
+              ))}
+            </div>
+          </section>
 
-                {/* Authorities features follow */}
-              </div>
+          {/* Services Section */}
+          <section id="services" className="mb-16">
+            <h2 className="text-2xl font-semibold text-gray-800 text-center mb-8">Services Provided</h2>
 
-              <h3 className="text-xl font-semibold mt-8 mb-4">Authority Features</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {authorityFeatures.map((item, idx) => (
-                  <Card key={`af-${idx}`} title={item} />
-                ))}
-              </div>
+            <h3 className="text-xl font-semibold text-gray-700 mb-4">For Users</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+              {userServices.map((item, idx) => (
+                <Card key={`us-${idx}`} title={item} />
+              ))}
             </div>
 
-            {/* Services Section */}
-            <div id="services" className="my-16">
-              <h2 className="text-2xl font-semibold text-center mb-8">Services Provided</h2>
-
-              <h3 className="text-xl font-semibold mb-4">For Users</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-                {userServices.map((item, idx) => (
-                  <Card key={`us-${idx}`} title={item} />
-                ))}
-              </div>
-
-              <h3 className="text-xl font-semibold mb-4">For Authorities</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {authorityServices.map((item, idx) => (
-                  <Card key={`as-${idx}`} title={item} />
-                ))}
-              </div>
+            <h3 className="text-xl font-semibold text-gray-700  mb-4">For Authorities</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {authorityServices.map((item, idx) => (
+                <Card key={`as-${idx}`} title={item} />
+              ))}
             </div>
+          </section>
 
-            
-          </div>
         </div>
-      </section>
+      </main>
 
       <Footer />
       <CustomCursor />
@@ -149,15 +135,27 @@ export default function EssentialPage() {
   );
 }
 
-/* --- Small presentational Card component used above --- */
+/* Card Component */
 function Card({ title }) {
   return (
     <div className="bg-white shadow-md rounded-2xl p-5 hover:shadow-lg transition-transform transform hover:-translate-y-1">
       <div className="flex items-start gap-4">
-        <span className="mt-1" aria-hidden>
-          {/* simple check/traffic-ish icon (inline SVG) */}
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" className="text-black" xmlns="http://www.w3.org/2000/svg">
-            <path d="M20 6L9 17l-5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        <span className="mt-1" aria-hidden="true">
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            className="text-black"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M20 6L9 17l-5-5"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </svg>
         </span>
         <p className="text-gray-700">{title}</p>

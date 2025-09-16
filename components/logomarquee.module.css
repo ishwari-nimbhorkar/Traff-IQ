@@ -6,9 +6,9 @@
 
 .marqueeInner {
   display: flex;
-  animation: scroll 30s linear infinite;
   width: max-content;
-  
+  animation: scroll 30s linear infinite;
+  will-change: transform; /* improves performance for smooth animations */
 }
 
 .marqueeInner:hover {
@@ -16,10 +16,10 @@
 }
 
 @keyframes scroll {
-  from {
+  0% {
     transform: translateX(0);
   }
-  to {
+  100% {
     transform: translateX(-50%);
   }
 }
