@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 export default function MobileWarning() {
   const [isMobile, setIsMobile] = useState(false);
-  const [dismissed, setDismissed] = useState(false);
+  const [forceDesktop, setForceDesktop] = useState(false);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -16,7 +16,7 @@ export default function MobileWarning() {
   }, []);
 
   const handleContinue = () => {
-    setDismissed(true);
+    setForceDesktop(true);
 
     // Force "desktop-like" rendering by updating viewport
     const viewport = document.querySelector("meta[name=viewport]");
@@ -28,18 +28,29 @@ export default function MobileWarning() {
     }
   };
 
-  if (!isMobile || dismissed) return null;
+  // If on desktop, do nothing
+  if (!isMobile) return null;
 
+  // If on mobile but forced desktop mode → show top banner warning
+  if (forceDesktop) {
+    return (
+      <div className="fixed top-0 left-0 w-full z-50 bg-yellow-500 text-black text-sm font-medium text-center py-2 shadow-md">
+        ⚠ You’re using <b>Desktop Mode</b> on a mobile device.  
+        The UI may not work as expected.
+      </div>
+    );
+  }
+
+  // If mobile and not yet continued → block the screen
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
       <div className="max-w-sm w-full p-6 bg-white rounded-lg shadow-lg text-center">
         <h2 className="text-lg font-semibold text-gray-800">
-          Mobile Experience Limited
+          Mobile Access Restricted
         </h2>
         <p className="mt-2 mb-6 text-sm text-gray-600">
-          Our website is not fully optimized for mobile yet.
-          <br />
-          For the best experience, please switch to <b>Desktop Mode</b>.
+          Our website is not fully optimized for mobile.  
+          Please switch to <b>Desktop Mode</b> to continue.
         </p>
         <button
           onClick={handleContinue}
