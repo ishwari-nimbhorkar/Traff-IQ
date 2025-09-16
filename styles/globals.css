@@ -1,0 +1,105 @@
+@import "tailwindcss/preflight";
+@tailwind utilities;
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');  
+
+:root {
+  --background: #ffffff;
+  --foreground: #ffffff;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #ffffff;
+    --foreground: #ffffff;
+  }
+}
+
+@font-face {
+  font-family: "cy-grotesk";
+  src: url("/fonts/buzan-cy-grotesk-grand-dark.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "cy-grotesk";
+  src: url("/fonts/cy-grotesk-wide.ttf") format("truetype");
+  font-weight: 700; 
+  font-style: normal;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.font-poppins {
+  font-family: 'Poppins', sans-serif;
+}
+
+.font-montserrat {
+  font-family: 'Montserrat', sans-serif;
+}
+
+input::placeholder,
+textarea::placeholder {
+   font-family: 'Poppins', sans-serif;
+}
+h1  {
+  font-family: 'cy-grotesk', sans-serif;
+}
+
+h2  {
+  font-family: 'cy-grotesk', sans-serif;
+}
+
+h2 + p {
+  font-family: 'Poppins', sans-serif;
+}
+
+
+h2 + p + p {
+  font-family: 'Poppins', sans-serif;
+}
+
+h3 + p {
+  font-family: 'Poppins', sans-serif;
+}
+div + h3{
+  font-family: 'Poppins', sans-serif;
+}
+div + span {
+  font-family: 'Poppins', sans-serif;
+}
+
+div + div + p + strong + link {
+  font-family: 'Poppins', sans-serif;
+}
+
+div + div + link + p {
+  font-family: 'Poppins', sans-serif;
+}
+
+
+span { 
+  font-family: 'Poppins', sans-serif;
+}
+nav {
+  font-family: 'Poppins', sans-serif;
+}
+
+
+
+footer {
+  font-family: 'Poppins', sans-serif;
+}
+ 
+

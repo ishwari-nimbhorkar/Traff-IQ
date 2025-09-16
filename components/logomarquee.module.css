@@ -1,0 +1,25 @@
+.marquee {
+  display: flex;
+  overflow: hidden;
+  width: 100%;
+}
+
+.marqueeInner {
+  display: flex;
+  animation: scroll 30s linear infinite;
+  width: max-content;
+  
+}
+
+.marqueeInner:hover {
+  animation-play-state: paused;
+}
+
+@keyframes scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
