@@ -68,6 +68,10 @@ h2 {
   font-family: "cy-grotesk", sans-serif;
 }
 
+h1 {
+ font-family: "cy-grotesk", sans-serif; 
+}
+
 /* Paragraphs + nav + footer + spans */
 h2 + p,
 h2 + p + p,
