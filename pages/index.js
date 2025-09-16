@@ -10,6 +10,7 @@ import Features from "@/components/Features";
 import Aipower from "@/components/Aipower";
 import CustomCursor from "@/components/CustomCursor";
 import dynamic from "next/dynamic";
+import Metadata from "@/components/metadata"
 
 // Lazy-loaded components for performance
 const Profiles = dynamic(() => import("@/components/Profiles"), { ssr: false });
@@ -19,6 +20,7 @@ const Aboutus = dynamic(() => import("@/components/Aboutus"), { ssr: false });
 export default function Home() {
   return (
     <>
+     
       <Navbar />
       <main id="hero" className="text-black">
         <Hero />
@@ -47,6 +49,7 @@ export default function Home() {
         </section>
       </main>
       <Footer />
+      <Metadata />
       <CustomCursor />
     </>
   );
