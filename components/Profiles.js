@@ -14,35 +14,35 @@ const montserrat = Montserrat({
 export default function PortfolioSection() {
   const portfolioItems = [
     {
-      title: "Ishwari Nimbhorkar [ Team Lead ]",
-      href: "/portfolio/ryan-serhant",
+      title: "Ishwari [ Team Lead ]",
+      href: "/profiles",
       imageSrc: "/images/team lead.webp",
       logoSrc: "/images/image-removebg-preview (13) (1).png",
       className: "member",
     },
     {
       title: "Ryan Serhant",
-      href: "/portfolio/ryan-serhant",
+      href: "/profiles",
       imageSrc: "/images/team lead.webp",
       logoSrc:
         "https://cdn.sanity.io/images/iw93gfn0/v4/d206554accd36bb0b0d7ce7fef92493297316ef8-158x26.png",
     },
     {
       title: "Coach Jordie",
-      href: "/portfolio/coach-jordie",
+      href: "/profiles",
       imageSrc: "/images/team lead.webp",
       logoSrc: "",
     },
     {
       title: "Yoori Park",
-      href: "/portfolio/yoori-park-luxury-estates",
+      href: "/profiles",
       imageSrc: "/images/team lead.webp",
       logoSrc:
         "https://cdn.sanity.io/images/iw93gfn0/v4/1a02821fcf830ee5d05a3fff9dcc58e20bab04a2-1387x220.png",
     },
     {
       title: "Lions Group",
-      href: "/portfolio/lions-group",
+      href: "/profiles",
       imageSrc: "/images/team lead.webp",
       logoSrc:
         "https://cdn.sanity.io/images/iw93gfn0/v4/23d50dfd3ee2babad9a5bec6d0313df8d941e58f-425x177.png",

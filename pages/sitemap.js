@@ -84,9 +84,17 @@ export default function Sitemap() {
         <div className="text-black container mx-auto">
           <div className="mx-auto max-w-5xl px-6 sm:p-0">
             {/* Title */}
-            <h1 className="text-4xl font-bold text-center mt-10 leading-tight mb-10">
+            <h1 className="text-4xl font-bold text-center mt-10 leading-tight mb-6">
               Sitemap – <span className="text-black">Traff IQ</span>
             </h1>
+
+            {/* Description under heading */}
+            <p className="text-center text-gray-700 max-w-3xl mx-auto mb-10">
+              <b>Traff-IQ sitemap</b> offers a clear navigation guide for both daily users
+              and traffic authorities—helping citizens access routes, updates,
+              and insights quickly, while enabling authorities to manage alerts,
+              reports, and control tools with ease.
+            </p>
 
             {/* Sitemap Sections */}
             {siteSections.map((section, idx) => (

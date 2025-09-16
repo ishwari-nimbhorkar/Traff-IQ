@@ -22,7 +22,7 @@ export default function MarqueeSection() {
               <p className="text-base tracking-[0.1px] md:text-[16px] px-3 text-gray-600">
                 AI-powered traffic solutions designed to reduce <br />{" "}
                 <Link
-                  href="/locations"
+                  href="/aipower"
                   className="font-extrabold hover:underline"
                 >
                 congestion, optimize signals, and improve road safety<br />{" "}
@@ -45,7 +45,7 @@ export default function MarqueeSection() {
                 ].map((loc) => (
                   <Link
                     key={loc}
-                    href={`/locations/${loc}`}
+                    href="/aipower"
                     className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium text-primary underline-offset-4 hover:underline h-10 px-4 py-2 transition-transform duration-200 hover:scale-105"
                   >
                     {loc.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())}

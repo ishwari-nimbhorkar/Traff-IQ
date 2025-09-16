@@ -31,7 +31,7 @@
 
               {/* Call to Action Button */}
               <Link
-              href="/get-a-quote"
+              href="/login"
               className=" sticky-target  mt-10 inline-flex font-poppins items-center gap-4  tracking-[0.1px] rounded-full text-sm bg-black text-white px-6 py-3 hover:bg-black-600"
             >
               Start Your Journey, Now!

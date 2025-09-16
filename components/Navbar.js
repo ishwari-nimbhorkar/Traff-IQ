@@ -59,7 +59,7 @@ export default function Navbar() {
           </ul>
 
           <Link
-            href="/"
+            href="/login"
             className=" sticky-target inline-flex tracking-[0.1px] items-center gap-2 rounded-full text-sm bg-black text-white px-6 py-3 hover:bg-black-600"
           >
             Login | Sign up
@@ -122,7 +122,7 @@ export default function Navbar() {
             <Link href="/essentials/#help" onClick={() => setIsMobileOpen(false)}>Help</Link>
 
             <Link
-              href="/get-a-quote"
+              href="/login"
               className="inline-flex items-center gap-2 rounded-md bg-black text-white px-4 py-2 hover:bg-black-800"
             >
               Login | Sign up

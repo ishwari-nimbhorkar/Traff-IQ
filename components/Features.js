@@ -25,7 +25,7 @@ export default function BusinessSection() {
       <div className="mt-10 grid gap-4 sm:mt-16 lg:grid-cols-3 lg:grid-rows-2">
         {/* Real-Time Monitoring */}
       <div className="relative group lg:row-span-2">
-          <Link href="/new-development-websites" className="block">
+          <Link href="/features&services/#services" className="block">
             <div className="relative flex h-full flex-col overflow-hidden rounded-xl">
               <div className="relative min-h-[500px] w-full grow max-lg:mx-auto">
                 <Image
@@ -48,7 +48,7 @@ export default function BusinessSection() {
 
         {/* Smart Route Optimization */}
         <div className="relative group max-lg:row-start-1">
-          <Link href="/restaurant-and-hospitality-website-design" className="block">
+          <Link href="/features&services/#services" className="block">
             <div className="relative flex h-full flex-col overflow-hidden rounded-xl">
               <div className="relative min-h-60 w-full grow max-lg:mx-auto">
                 <Image
@@ -69,7 +69,7 @@ export default function BusinessSection() {
 
         {/* Data & Insights */}
         <div className="relative group max-lg:row-start-3 lg:col-start-2 lg:row-start-2">
-          <Link href="/website-design-for-professional-services" className="block">
+          <Link href="/features&services/#services" className="block">
             <div className="relative flex h-full flex-col overflow-hidden rounded-xl">
               <div className="relative min-h-60 w-full grow max-lg:mx-auto">
                 <Image
@@ -100,7 +100,7 @@ export default function BusinessSection() {
                     AI will do this for You, before anything happens.
                   </p>
                   {/* Separate Link for Explore More */}
-                  <Link href="/get-a-quote">
+                  <Link href="/features&services/#services">
                     <div className="border rounded-full w-[180px] mx-auto py-3 mt-5 flex items-center justify-center group-hover:bg-white group-hover:text-black transition-colors duration-200">
                       <span className="flex font-poppins tracking-[0.1px] items-center gap-2 text-white group-hover:text-black transition-colors duration-200">
                         Explore More

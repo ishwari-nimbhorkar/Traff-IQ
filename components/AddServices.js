@@ -24,7 +24,7 @@ improve safety, and
         {/* Buttons */}
         <div className="my-6 tracking-[0.1px] font poppins flex flex-wrap gap-3 justify-center">
           <Link
-            href="/services/logo-design-and-brand-identity"
+            href="/features&services/#services"
             target="_self"
             className="inline-flex items-center justify-center text-gray-600 gap-2 whitespace-nowrap rounded-md border border-gray-700 border-input bg-background px-4 py-2 h-10 text-sm font-medium transition-all duration-200 hover:scale-105 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
           >
@@ -32,7 +32,7 @@ improve safety, and
           </Link>
 
           <Link
-            href="/services/web-app-development"
+            href="/features&services/#services"
             target="_self"
             className="inline-flex items-center justify-center text-gray-600 gap-2 whitespace-nowrap rounded-md border border-gray-700 border-input bg-background px-4 py-2 h-10 text-sm font-medium transition-all duration-200 hover:scale-105 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
           >
@@ -40,7 +40,7 @@ improve safety, and
           </Link>
 
           <Link
-            href="/services/web-hosting"
+            href="/features&services/#services"
             target="_self"
             className="inline-flex items-center justify-center text-gray-600 gap-2 whitespace-nowrap rounded-md border border-gray-700 border-input bg-background px-4 py-2 h-10 text-sm font-medium transition-all duration-200 hover:scale-105 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
           >
