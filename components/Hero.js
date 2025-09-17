@@ -12,8 +12,8 @@ const Hero = () => {
         <div className="mx-auto max-w-6xl text-center">
           {/* Heading */}
           <h1 className="text-[2.625rem] font-semibold leading-tight tracking-wide mb-6">
-            <span className="block">Transforming Urban & Traffic With</span>
-            <span className="block">Smart Technology, AI-Powered</span>
+            <span className="block font-cy-grotesk">Transforming Urban & Traffic With</span>
+            <span className="block font-cy-grotesk">Smart Technology, AI-Powered</span>
           </h1>
 
           {/* Subtitle */}
