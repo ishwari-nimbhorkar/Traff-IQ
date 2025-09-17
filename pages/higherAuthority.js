@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Navbar from "@/components/higerAuthority_Navbar";
 import Footer from "@/components/higherAuthority_Footer";
 import Hero from "@/components/Hero";
@@ -9,8 +10,7 @@ import AddServices from "@/components/AddServices";
 import Features from "@/components/Features";
 import Aipower from "@/components/Aipower";
 import CustomCursor from "@/components/CustomCursor";
-import dynamic from "next/dynamic";
-import Metadata from "@/components/metadata"
+import Metadata from "@/components/metadata";
 
 // Lazy-loaded components for performance
 const Profiles = dynamic(() => import("@/components/Profiles"), { ssr: false });
@@ -20,13 +20,29 @@ const Aboutus = dynamic(() => import("@/components/Aboutus"), { ssr: false });
 export default function Home() {
   return (
     <>
-     
-      <Navbar />
-      <main id="hero" className="text-black">
-        
-      </main>
-      <Footer />
+      {/* Metadata for SEO */}
       <Metadata />
+
+      {/* Navigation */}
+      <Navbar />
+
+      {/* Main Content */}
+      <main id="hero" className="text-black">
+        <Hero />
+        <LogoMarquee />
+        <Services />
+        <AddServices />
+        <Features />
+        <Aipower />
+        <Profiles />
+        <Book />
+        <Aboutus />
+      </main>
+
+      {/* Footer */}
+      <Footer />
+
+      {/* Custom Cursor */}
       <CustomCursor />
     </>
   );

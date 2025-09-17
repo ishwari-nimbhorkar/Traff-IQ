@@ -1,4 +1,5 @@
 "use client";
+
 import React from "react";
 import Image from "next/image";
 
@@ -136,90 +137,83 @@ const cities = [
 ];
 
 export default function SlowestCitiesTable() {
-  return (<>
-     <div className="container mx-auto px-4">
-        {/* Heading */}
-        <div className="mb-7 md:w-3/5 w-full mt-20 text-left">
-          <h2 className="text-3xl md:text-4xl font-bold leading-tight mb-4">
-            Top 10 slowest cities of 2024
+  return (
+    <div className="container mx-auto px-4 mt-20">
+      {/* Heading */}
+      <div className="mb-7 md:w-3/5 w-full text-left">
+        <h2 className="text-3xl md:text-4xl font-bold leading-tight mb-4">
+          Top 10 slowest cities of 2024
+        </h2>
+        <p className="text-gray-700 text-base md:text-[16px] tracking-[0.1px]">
+          We have ranked more than 500 cities based on congestion and drive times for a typical trip. Here is the top 10.
+        </p>
+      </div>
 
-          </h2>
-          <p className="text-gray-700 text-base md:text-[16px] tracking-[0.1px]">
-We've ranked more than 500 cities based on congestion and drive times for a typical trip. Here is the top 10.          </p>
-        </div>
-        </div>
-
-    <div className="overflow-x-auto pl-11 pr-7 pt- py-10">
-      <table className="min-w-full text-[13px] text-left border-collapse">
-        <thead className="text-gray-900">
-          <tr>
-            <th className="py-3  px-2">Rank by filter</th>
-            <th className="py-3 px-2">World rank</th>
-            <th className="py-3 px-2">City</th>
-            <th className="py-3 px-2">Average travel time per 10 km</th>
-            <th className="py-3 px-2">Change from 2023</th>
-            <th className="py-3 px-2">Congestion level %</th>
-            <th className="py-3 px-2">Time lost per year at rush hours</th>
-            <th className="py-3 px-2">Congestion world rank</th>
-          </tr>
-        </thead>
-        <tbody>
-          {cities.map((city) => (
-            <tr
-              key={city.rank}
-              className="hover:bg-gray-50"
-            >
-              <td className="py-2 px-2">{city.rank}</td>
-              <td className="py-2 px-2">
-                <div className="flex items-center justify-center">
+      {/* Table */}
+      <div className="overflow-x-auto relative shadow-md rounded-lg">
+        <table className="min-w-full text-[13px] border-collapse">
+          <caption className="sr-only">Top 10 slowest cities in 2024 with traffic data</caption>
+          <thead className="text-gray-900 bg-gray-100 sticky top-0">
+            <tr>
+              <th scope="col" className="py-3 px-2">Rank by filter</th>
+              <th scope="col" className="py-3 px-2">World rank</th>
+              <th scope="col" className="py-3 px-2">City</th>
+              <th scope="col" className="py-3 px-2">Average travel time per 10 km</th>
+              <th scope="col" className="py-3 px-2">Change from 2023</th>
+              <th scope="col" className="py-3 px-2">Congestion level %</th>
+              <th scope="col" className="py-3 px-2">Time lost per year at rush hours</th>
+              <th scope="col" className="py-3 px-2">Congestion world rank</th>
+            </tr>
+          </thead>
+          <tbody>
+            {cities.map((city) => (
+              <tr key={city.rank} className="hover:bg-gray-50">
+                <td className="py-2 px-2 text-center">{city.rank}</td>
+                <td className="py-2 px-2 text-center">
                   <span className="bg-red-600 text-white w-8 h-8 flex items-center justify-center rounded-full text-sm font-bold">
                     {city.worldRank}
                   </span>
-                </div>
-              </td>
-              <td className="py-2 px-2">
-                <div className="flex flex-col">
-                  <span className="font-semibold">{city.city}</span>
-                  <span className="flex items-center text-sm text-gray-600 gap-1">
-                    <Image
-                      src={city.flag}
-                      alt={city.country}
-                      width={16}
-                      height={12}
-                      className="rounded-sm"
-                    />
-                    {city.country}
+                </td>
+                <td className="py-2 px-2">
+                  <div className="flex flex-col">
+                    <span className="font-semibold">{city.city}</span>
+                    <span className="flex items-center text-sm text-gray-600 gap-1">
+                      <Image
+                        src={city.flag}
+                        alt={city.country}
+                        width={16}
+                        height={12}
+                        className="rounded-sm"
+                        priority
+                      />
+                      {city.country}
+                    </span>
+                  </div>
+                </td>
+                <td className="py-2 px-2 font-semibold">{city.travelTime}</td>
+                <td
+                  className={`py-2 px-2 font-medium ${
+                    city.changeType === "up" ? "text-red-600" : city.changeType === "down" ? "text-blue-600" : "text-gray-600"
+                  }`}
+                >
+                  {city.change}
+                </td>
+                <td className="py-2 px-2">{city.congestion}</td>
+                <td className="py-2 px-2">{city.lostTime}</td>
+                <td className="py-2 px-2 text-center">
+                  <span
+                    className={`${
+                      city.congestionWorldRank > 100 ? "bg-red-600" : "bg-orange-600"
+                    } text-white w-8 h-8 flex items-center justify-center rounded-full text-sm font-bold`}
+                  >
+                    {city.congestionWorldRank}
                   </span>
-                </div>
-              </td>
-              <td className="py-2 px-2 font-semibold">{city.travelTime}</td>
-              <td
-                className={`py-2 px-2 font-medium ${
-                  city.changeType === "up"
-                    ? "text-red-600"
-                    : city.changeType === "down"
-                    ? "text-blue-600"
-                    : "text-gray-600"
-                }`}
-              >
-                {city.change}
-              </td>
-              <td className="py-2 px-2">{city.congestion}</td>
-              <td className="py-2 px-2">{city.lostTime}</td>
-              <td className="py-2 px-2">
-                <span
-  className={`${
-    city.congestionWorldRank > 100 ? "bg-red-600" : "bg-orange-600"
-  } text-white w-8 h-8 flex items-center justify-center rounded-full text-sm font-bold`}
->
-  {city.congestionWorldRank}
-</span>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div> </>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
   );
- 
 }
