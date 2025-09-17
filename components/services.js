@@ -32,7 +32,7 @@ export default function FeaturedGrid() {
       className="w-full bg-cover mt-[-60px] bg-center pt-20 pb-8"
       id="featuredGrid-54c9e9323c91"
     >
-      <div className="container mx-auto px-4">
+      <div className="container mt-10 mx-auto px-4">
         {/* Heading */}
         <div className="mb-12 md:w-3/5 w-full text-left">
           <h2 className="text-3xl md:text-4xl font-bold leading-tight mb-4">

@@ -1,7 +1,7 @@
 "use client";
 
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import Navbar from "@/components/higerAuthority_Navbar";
+import Footer from "@/components/higherAuthority_Footer";
 import Hero from "@/components/Hero";
 import LogoMarquee from "@/components/LogoMarquee";
 import Services from "@/components/services";
@@ -11,8 +11,6 @@ import Aipower from "@/components/Aipower";
 import CustomCursor from "@/components/CustomCursor";
 import dynamic from "next/dynamic";
 import Metadata from "@/components/metadata"
-import Video from "@/components/Video-frame"
-import Cities from "@/components/Top_cities"
 
 // Lazy-loaded components for performance
 const Profiles = dynamic(() => import("@/components/Profiles"), { ssr: false });
@@ -25,32 +23,7 @@ export default function Home() {
      
       <Navbar />
       <main id="hero" className="text-black">
-        <Hero />
-        <LogoMarquee />
-        <Video />
-        <Cities />
-
-        <section id="services">
-          <Services />
-          <AddServices />
-        </section>
-
-        <section id="features">
-          <Features />
-          <Aipower />
-        </section>
-
-        <section id="profiles">
-          <Profiles />
-        </section>
-
-        <section id="book">
-          <Book />
-        </section>
-
-        <section id="aboutus">
-          <Aboutus />
-        </section>
+        
       </main>
       <Footer />
       <Metadata />
