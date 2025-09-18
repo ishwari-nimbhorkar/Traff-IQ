@@ -114,7 +114,7 @@ export default function Signup() {
     Send the request to using the mail to <Link
   href="mailto:ishwarinimbbhorkar1234@gamil.com"
   className="text-blue-600 hover:underline"
->Authority</Link>, Once Approve you will recieve your id and pass on youur registered mail.
+>Authority</Link>,with verification details. Once Approve you will recieve your id and pass on your registered mail.
             </p>
           </div>
         </aside>
