@@ -3,7 +3,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { signInWithEmailAndPassword, RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
+import { 
+  signInWithEmailAndPassword, 
+  GoogleAuthProvider, 
+  signInWithPopup 
+} from "firebase/auth";
 import { auth, db } from "@/lib/firebase";
 import { doc, setDoc, updateDoc, serverTimestamp } from "firebase/firestore";
 import Navbar from "@/components/Navbar";
@@ -13,13 +17,27 @@ import CustomCursor from "@/components/CustomCursor";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [phone, setPhone] = useState("");
-  const [otp, setOtp] = useState("");
-  const [otpSent, setOtpSent] = useState(false);
-  const [confirmationResult, setConfirmationResult] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // Email/Password Login
+  // Save or update user in Firestore
+  const saveUser = async (user, provider) => {
+    await setDoc(
+      doc(db, "users", user.uid),
+      {
+        uid: user.uid,
+        email: user.email || null,
+        displayName: user.displayName || "",
+        photoURL: user.photoURL || "",
+        providers: [provider],
+        roles: ["user"],
+        createdAt: serverTimestamp(),
+        lastLoginAt: serverTimestamp(),
+      },
+      { merge: true }
+    );
+  };
+
+  // Email/Password login
   const handleEmailLogin = async (e) => {
     e.preventDefault();
     if (!email || !password) return alert("Enter email & password");
@@ -27,10 +45,7 @@ export default function Login() {
     setLoading(true);
     try {
       const { user } = await signInWithEmailAndPassword(auth, email, password);
-
-      // update Firestore last login
       await updateDoc(doc(db, "users", user.uid), { lastLoginAt: serverTimestamp() });
-
       alert("Login successful");
       window.location.href = "/user";
     } catch (err) {
@@ -40,60 +55,19 @@ export default function Login() {
     setLoading(false);
   };
 
-  // Send OTP for phone login
-  const sendOTP = async () => {
-    if (!phone) return alert("Enter phone number with country code");
+  // Google login
+  const handleGoogleLogin = async () => {
     setLoading(true);
-
     try {
-      if (!window.recaptchaVerifier) {
-        window.recaptchaVerifier = new RecaptchaVerifier("recaptcha", { size: "invisible" }, auth);
-      }
-
-      const result = await signInWithPhoneNumber(auth, phone, window.recaptchaVerifier);
-      setConfirmationResult(result);
-      setOtpSent(true);
-      alert("OTP sent to your phone");
+      const provider = new GoogleAuthProvider();
+      const { user } = await signInWithPopup(auth, provider);
+      await saveUser(user, "google");
+      alert("Google login successful");
+      window.location.href = "/user";
     } catch (err) {
       console.error(err);
-      alert("Failed to send OTP: " + err.message);
+      alert(err.message);
     }
-
-    setLoading(false);
-  };
-
-  // Verify phone OTP
-  const verifyOTP = async (e) => {
-    e.preventDefault();
-    if (!otp) return alert("Enter OTP");
-    setLoading(true);
-
-    try {
-      const result = await confirmationResult.confirm(otp);
-      const user = result.user;
-
-      // create or update user in Firestore
-      await setDoc(
-        doc(db, "users", user.uid),
-        {
-          email: user.email || null,
-          phone: user.phoneNumber,
-          displayName: user.displayName || null,
-          providers: ["phone"],
-          roles: ["user"],
-          createdAt: serverTimestamp(),
-          lastLoginAt: serverTimestamp(),
-        },
-        { merge: true }
-      );
-
-      alert("Phone login successful");
-      window.location.href = "/";
-    } catch (err) {
-      console.error(err);
-      alert("Invalid OTP: " + err.message);
-    }
-
     setLoading(false);
   };
 
@@ -125,9 +99,31 @@ export default function Login() {
         </aside>
 
         {/* Right Side - Login Form */}
-        <section className="flex flex-col w-full lg:w-[520px] bg-white px-8 lg:px-16 py-12">
+        <section className="flex flex-col w-full lg:w-[520px] bg-white px-8 mt-10 lg:px-16 py-12">
           <div className="flex flex-col w-full max-w-md mx-auto bg-white p-8">
             <h2 className="text-2xl font-poppins font-medium text-gray-800 mb-6">Login</h2>
+
+            {/* Social Login */}
+            <div className="flex flex-col gap-3 mb-6">
+              <button
+                type="button"
+                onClick={handleGoogleLogin}
+                className="flex items-center text-zinc-900 justify-center gap-3 border rounded-md text-sm font-medium px-4 py-3 shadow-sm hover:bg-gray-100 transition"
+              >
+                <Image src="/images/google.png" alt="Google" width={16} height={16} />
+                <span>Sign in with Google</span>
+              </button>
+               <button
+                type="button"
+                onClick={handleGoogleLogin}
+                className="flex items-center text-zinc-900 justify-center gap-3 border rounded-md text-sm font-medium px-4 py-3 shadow-sm hover:bg-gray-100 transition"
+              >
+                <Image src="/images/microsoft.png" alt="Google" width={16} height={16} />
+                <span>Sign in with Microsoft</span>
+              </button>
+            </div>
+
+            <hr className="border-t border-gray-300 mb-6" />
 
             {/* Email/Password Login */}
             <form onSubmit={handleEmailLogin} className="flex flex-col gap-3 w-full mb-6">
@@ -154,50 +150,6 @@ export default function Login() {
               >
                 {loading ? "Logging in..." : "Login with Email"}
               </button>
-            </form>
-
-            <hr className="border-t border-gray-300 mb-6" />
-
-            {/* Phone Login */}
-            <form onSubmit={otpSent ? verifyOTP : (e) => e.preventDefault()} className="flex flex-col gap-3 w-full">
-              <input
-                type="tel"
-                placeholder="+911234567890"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                className="h-12 px-4 rounded-md text-sm ring-1 text-zinc-900 ring-gray-200 focus:ring-zinc-600"
-                required={!otpSent}
-                disabled={otpSent}
-              />
-              {otpSent && (
-                <input
-                  type="text"
-                  placeholder="Enter OTP"
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value)}
-                  className="h-12 px-4 rounded-md text-sm ring-1 ring-gray-200 focus:ring-zinc-600"
-                  required
-                />
-              )}
-              {!otpSent ? (
-                <button
-                  type="button"
-                  onClick={sendOTP}
-                  className="h-12 rounded-md border border-indigo-500 text-indigo-600 font-medium shadow-sm hover:bg-indigo-50 transition"
-                  disabled={loading}
-                >
-                  {loading ? "Sending OTP..." : "Send OTP"}
-                </button>
-              ) : (
-                <button
-                  type="submit"
-                  className="h-12 rounded-md border border-indigo-500 text-indigo-600 font-medium shadow-sm hover:bg-indigo-50 transition"
-                  disabled={loading}
-                >
-                  {loading ? "Verifying OTP..." : "Verify OTP"}
-                </button>
-              )}
-              <div id="recaptcha"></div>
             </form>
 
             <p className="text-xs text-center text-zinc-700 mt-6">

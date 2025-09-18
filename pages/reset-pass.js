@@ -98,7 +98,7 @@ export default function ResetPassword() {
             </h2>
             <p className="text-gray-600 text-sm">
               Provide your registered email address to get a password reset
-              link.
+              link(Check Spam Folder).
             </p>
           </div>
           <div>
@@ -106,7 +106,7 @@ export default function ResetPassword() {
               Check Email
             </h2>
             <p className="text-gray-600 text-sm">
-              A link will be sent to your email. Copy the reset code from it.
+              A link will be sent to your email. Copy the reset password from it.
             </p>
           </div>
           <div>
@@ -114,7 +114,7 @@ export default function ResetPassword() {
               Set New Password
             </h2>
             <p className="text-gray-600 text-sm">
-              Enter the reset code, new password, and confirm it.
+              Click Save password, and Done.
             </p>
           </div>
         </div>
@@ -151,40 +151,7 @@ export default function ResetPassword() {
                 {loading ? "Sending..." : "Send Reset Link"}
               </button>
 
-              {/* Reset Code Input */}
-              <input
-                type="text"
-                placeholder="Enter Reset Code"
-                value={resetCode}
-                onChange={(e) => setResetCode(e.target.value)}
-                className="focus:ring-1 focus:outline-none w-full text-sm rounded-md ring-1 shadow-sm transition duration-300 focus:ring-zinc-600 ring-gray-200 placeholder-zinc-400 text-zinc-900 hover:bg-zinc-50 h-12 px-4"
-              />
-
-              {/* New Password */}
-              <input
-                type="password"
-                placeholder="New Password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                className="focus:ring-1 focus:outline-none w-full text-sm rounded-md ring-1 shadow-sm transition duration-300 focus:ring-zinc-600 ring-gray-200 placeholder-zinc-400 text-zinc-900 hover:bg-zinc-50 h-12 px-4"
-              />
-
-              {/* Confirm Password */}
-              <input
-                type="password"
-                placeholder="Confirm Password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                className="focus:ring-1 focus:outline-none w-full text-sm rounded-md ring-1 shadow-sm transition duration-300 focus:ring-zinc-600 ring-gray-200 placeholder-zinc-400 text-zinc-900 hover:bg-zinc-50 h-12 px-4"
-              />
-
-              <button
-                type="submit"
-                className="hover:bg-indigo-50 font-poppins rounded-md border border-indigo-500 text-indigo-600 text-sm font-medium shadow-sm w-full h-12"
-                disabled={loading}
-              >
-                {loading ? "Processing..." : "Confirm"}
-              </button>
+             
             </form>
 
             {message && (

@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import ProtectedRoute from "@/components/ProtectedRoute"; // Import HOC
 import Navbar from "@/components/higerAuthority_Navbar";
 import Footer from "@/components/higherAuthority_Footer";
 import Hero from "@/components/Hero";
@@ -19,23 +20,25 @@ const Aboutus = dynamic(() => import("@/components/Aboutus"), { ssr: false });
 
 export default function Home() {
   return (
-    <>
-      {/* Metadata for SEO */}
-      <Metadata />
+    <ProtectedRoute requiredRole="admin">
+      <>
+        {/* Metadata for SEO */}
+        <Metadata />
 
-      {/* Navigation */}
-      <Navbar />
+        {/* Navigation */}
+        <Navbar />
 
-      {/* Main Content */}
-      <main id="hero" className="text-black">
-        
-      </main>
+        {/* Main Content */}
+        <main id="hero" className="text-black">
+          {/* Your page content goes here */}
+        </main>
 
-      {/* Footer */}
-      <Footer />
+        {/* Footer */}
+        <Footer />
 
-      {/* Custom Cursor */}
-      <CustomCursor />
-    </>
+        {/* Custom Cursor */}
+        <CustomCursor />
+      </>
+    </ProtectedRoute>
   );
 }

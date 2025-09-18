@@ -1,8 +1,16 @@
 "use client";
 
 import React from "react";
+import { useRouter } from "next/navigation";
 
 const SearchBar = () => {
+  const router = useRouter();
+
+  // Redirect to login on click
+  const handleSearchClick = () => {
+    router.push("/login");
+  };
+
   return (
     <div className="flex items-center justify-center h-[150px] bg-white px-4 sm:px-6 lg:px-20">
       <div className="flex items-center gap-5 w-full max-w-2xl">
@@ -16,6 +24,7 @@ const SearchBar = () => {
 
         {/* Search Button */}
         <button
+          onClick={handleSearchClick}
           className="flex items-center gap-2 px-6 py-3 bg-black text-white rounded-full hover:bg-gray-800 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500"
           aria-label="Search"
         >

@@ -1,6 +1,7 @@
+// pages/api/reset-password.js
 import bcrypt from "bcryptjs";
-// Import your database connection
-import db from "../../lib/firebase.js"; // adjust path if needed
+import { db } from "../../lib/firebase.js"; // Firestore instance
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -12,14 +13,20 @@ export default async function handler(req, res) {
 
     // Validate input
     if (!email || !otp || !newPassword) {
-      return res.status(400).json({ error: "Email, OTP, and new password are required" });
+      return res
+        .status(400)
+        .json({ error: "Email, OTP, and new password are required" });
     }
 
-    // 1. Check if user exists
-    const user = await db.user.findUnique({ where: { email } });
-    if (!user) {
+    // 1. Get user document from Firestore
+    const userRef = doc(db, "users", email); // assuming email is document ID
+    const userSnap = await getDoc(userRef);
+
+    if (!userSnap.exists()) {
       return res.status(404).json({ error: "User not found" });
     }
+
+    const user = userSnap.data();
 
     // 2. Verify OTP
     if (user.otp !== otp) {
@@ -30,9 +37,9 @@ export default async function handler(req, res) {
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
     // 4. Update password and clear OTP
-    await db.user.update({
-      where: { email },
-      data: { password: hashedPassword, otp: null },
+    await updateDoc(userRef, {
+      password: hashedPassword,
+      otp: null,
     });
 
     return res.status(200).json({ message: "Password reset successful" });

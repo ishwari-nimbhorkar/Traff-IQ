@@ -2,10 +2,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function Navbar() {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [shadow, setShadow] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
 
   // Handle scroll shadow
   useEffect(() => {
@@ -30,10 +33,20 @@ export default function Navbar() {
     { href: "/essentials/#help", label: "Help" },
   ];
 
+  // Determine button target and text dynamically
+  const isAuthPage = ["/login", "/sign-up", "/reset-pass"].includes(pathname);
+  const buttonHref = isAuthPage ? "/" : "/login";
+  const buttonText = isAuthPage ? "Back" : "Login | Sign up";
+
+  const handleButtonClick = (e) => {
+    e.preventDefault();
+    router.push(buttonHref);
+  };
+
   return (
     <nav
-      className={`fixed top-0 left-0 w-full z-50 transition-shadow bg-white duration-300 ${
-        shadow ? "bg-white shadow-lg" : "bg-transparent"
+      className={`fixed top-0 left-0 w-full z-50 transition-shadow duration-300 ${
+        shadow ? "bg-white shadow-lg" : "bg-white"
       }`}
     >
       <div className="container mx-auto flex items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
@@ -59,11 +72,13 @@ export default function Navbar() {
             ))}
           </ul>
 
-          <Link
-            href="/login"
+          {/* Dynamic Button */}
+          <a
+            href={buttonHref}
+            onClick={handleButtonClick}
             className="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium text-white bg-black rounded-full hover:bg-gray-800 transition-colors"
           >
-            Login | Sign up
+            {buttonText}
             <svg
               width="12"
               height="12"
@@ -80,7 +95,7 @@ export default function Navbar() {
                 strokeLinejoin="round"
               />
             </svg>
-          </Link>
+          </a>
         </div>
 
         {/* Mobile Menu Button */}
@@ -123,11 +138,17 @@ export default function Navbar() {
               </Link>
             ))}
 
-            <Link
-              href="/login"
+            {/* Dynamic Mobile Button */}
+            <a
+              href={buttonHref}
+              onClick={(e) => {
+                e.preventDefault();
+                setIsMobileOpen(false);
+                router.push(buttonHref);
+              }}
               className="inline-flex items-center gap-2 px-4 py-2 text-white bg-black rounded-md hover:bg-gray-800 transition-colors"
             >
-              Login | Sign up
+              {buttonText}
               <svg
                 width="12"
                 height="12"
@@ -144,7 +165,7 @@ export default function Navbar() {
                   strokeLinejoin="round"
                 />
               </svg>
-            </Link>
+            </a>
           </div>
         )}
       </div>
