@@ -5,9 +5,10 @@ import { useRouter } from "next/navigation";
 import { auth, db } from "@/lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
 
-export default function ProtectedRoute({ children, requiredRole = "admin" }) {
+export default function ProtectedRoute({ children }) {
   const [loading, setLoading] = useState(true);
-  const [denied, setDenied] = useState(false); // track access denied
+  const [denied, setDenied] = useState(false);
+  const [message, setMessage] = useState("");
   const router = useRouter();
 
   useEffect(() => {
@@ -15,7 +16,9 @@ export default function ProtectedRoute({ children, requiredRole = "admin" }) {
       const user = auth.currentUser;
 
       if (!user) {
+        // not logged in
         setDenied(true);
+        setMessage("You must be logged in to access this section. Redirecting to login…");
         setTimeout(() => router.replace("/login"), 2000);
         return;
       }
@@ -23,17 +26,20 @@ export default function ProtectedRoute({ children, requiredRole = "admin" }) {
       const userDoc = await getDoc(doc(db, "users", user.uid));
       const userData = userDoc.data();
 
-      if (!userData || !userData.roles.includes(requiredRole)) {
-        setDenied(true);
-        setTimeout(() => router.replace("/user"), 2000);
+      if (userData?.roles?.includes("admin")) {
+        // logged in as admin → go to higherAuthority
+        router.replace("/higherAuthority");
         return;
       }
 
-      setLoading(false);
+      // logged in but not admin → go to user
+      setDenied(true);
+      setMessage("Authority section is for admins only. Redirecting to user page…");
+      setTimeout(() => router.replace("/user"), 2000);
     };
 
     checkAccess();
-  }, [router, requiredRole]);
+  }, [router]);
 
   if (loading && !denied) {
     return <p className="p-8 text-center">Loading...</p>;
@@ -45,8 +51,7 @@ export default function ProtectedRoute({ children, requiredRole = "admin" }) {
         {/* Notification box */}
         <div className="items-center justify-center right-6 z-50 animate-fade-in">
           <div className="bg-white text-black px-4 py-2 rounded-lg shadow-lg">
-            Authority section is for <span className="font-semibold">admins only</span>. <br />Not for the users. 
-            Redirecting…
+            {message}
           </div>
         </div>
       </div>
