@@ -28,15 +28,7 @@ export default function Home() {
 
       {/* Main Content */}
       <main id="hero" className="text-black">
-        <Hero />
-        <LogoMarquee />
-        <Services />
-        <AddServices />
-        <Features />
-        <Aipower />
-        <Profiles />
-        <Book />
-        <Aboutus />
+        
       </main>
 
       {/* Footer */}

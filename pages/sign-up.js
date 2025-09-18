@@ -3,6 +3,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { auth, db } from "@/lib/firebase";
+import {
+  createUserWithEmailAndPassword,
+  GoogleAuthProvider,
+  OAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
+import { doc, setDoc, serverTimestamp } from "firebase/firestore";
+
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CustomCursor from "@/components/CustomCursor";
@@ -10,30 +19,67 @@ import CustomCursor from "@/components/CustomCursor";
 export default function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
-const handleEmailSignup = (e) => {
-  e.preventDefault();
-  console.log("Email signup:", { email, password });
-};
+  // Save user in Firestore
+  const saveUser = async (user, provider) => {
+    await setDoc(
+      doc(db, "users", user.uid),
+      {
+        uid: user.uid,
+        email: user.email || null,
+        displayName: user.displayName || "",
+        phone: user.phoneNumber || "",
+        photoURL: user.photoURL || "",
+        providers: [provider],
+        roles: ["user"],
+        createdAt: serverTimestamp(),
+        lastLoginAt: serverTimestamp(),
+      },
+      { merge: true }
+    );
+  };
 
-const handleSocialSignup = (provider) => {
-  console.log(`Sign up with ${provider}`);
-};
+  // Signup with email/password
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const res = await createUserWithEmailAndPassword(auth, email, password);
+      await saveUser(res.user, "password");
+      alert("Account created successfully!");
+    } catch (err) {
+      console.error(err);
+      alert(err.message);
+    }
+    setLoading(false);
+  };
 
+  // Social signup
+  const handleSocialSignup = async (providerName) => {
+    try {
+      let provider;
+      if (providerName === "google") {
+        provider = new GoogleAuthProvider();
+      } else if (providerName === "microsoft") {
+        provider = new OAuthProvider("microsoft.com");
+      }
+      const res = await signInWithPopup(auth, provider);
+      await saveUser(res.user, providerName);
+    } catch (err) {
+      console.error(err);
+      alert(err.message);
+    }
+  };
 
   return (
     <>
       <Navbar />
       <main className="flex min-h-screen tracking-[0.1px]">
         {/* Left Side - Features */}
-<aside className="hidden lg:flex flex-col pl-60 -mt-16 justify-center items-start w-1/2 border-r border-[#eeeeee] bg-[#F4F4F5] p-12 space-y-8">           {/* Logo + Title */}
+        <aside className="hidden lg:flex flex-col pl-60 -mt-16 justify-center items-start w-1/2 border-r border-[#eeeeee] bg-[#F4F4F5] p-12 space-y-8">
           <div className="flex items-center gap-2">
-            <Link
-              href="/"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Botpress"
-            >
+            <Link href="/" aria-label="Traff-IQ">
               <Image
                 src="/images/IQ.png"
                 alt="Traff-IQ Logo"
@@ -42,12 +88,9 @@ const handleSocialSignup = (provider) => {
                 priority
               />
             </Link>
-            <h2 className="text-2xl font-poppins font-bold text-black">
-              Traff-IQ
-            </h2>
+            <h2 className="text-2xl font-poppins font-bold text-black">Traff-IQ</h2>
           </div>
 
-          {/* Features */}
           <div>
             <h2 className="text-xl font-semibold text-gray-800 mb-2">
               Predictive Traffic AI
@@ -56,7 +99,6 @@ const handleSocialSignup = (provider) => {
               AI anticipates congestion before it happens, giving you routes that save minutes.
             </p>
           </div>
-
           <div>
             <h2 className="text-xl font-semibold text-gray-800 mb-2">
               Urban Mobility Insights
@@ -65,7 +107,6 @@ const handleSocialSignup = (provider) => {
               Understand city traffic patterns and make smarter travel decisions based on analytics.
             </p>
           </div>
-
           <div>
             <h2 className="text-xl font-semibold text-gray-800 mb-2">
               Smart Alerts & Safety
@@ -79,7 +120,6 @@ const handleSocialSignup = (provider) => {
         {/* Right Side - Signup Form */}
         <section className="flex flex-col w-full lg:w-[520px] bg-white px-8 lg:px-16 py-12">
           <div className="flex flex-col w-full max-w-md mx-auto bg-white p-8">
-            {/* Header */}
             <h2 className="text-2xl font-poppins font-medium text-gray-800 mb-6">
               Get Started
             </h2>
@@ -88,13 +128,13 @@ const handleSocialSignup = (provider) => {
             <div className="flex flex-col gap-3 mb-6">
               {[
                 {
-                  provider: "Google",
+                  provider: "google",
                   icon: "/images/google.png",
                   color:
                     "border-zinc-500 text-zinc-700 hover:bg-zinc-100",
                 },
                 {
-                  provider: "Microsoft",
+                  provider: "microsoft",
                   icon: "/images/microsoft.png",
                   color:
                     "border-zinc-500 text-zinc-700 hover:bg-zinc-100",
@@ -112,7 +152,10 @@ const handleSocialSignup = (provider) => {
                     width={16}
                     height={16}
                   />
-                  <span>Sign up with {social.provider}</span>
+                  <span>
+                    Sign up with{" "}
+                    {social.provider === "microsoft" ? "Microsoft" : "Google"}
+                  </span>
                 </button>
               ))}
             </div>
@@ -122,7 +165,7 @@ const handleSocialSignup = (provider) => {
             {/* Email Signup */}
             <form
               className="flex flex-col gap-3 w-full mb-4"
-              onSubmit={handleEmailSignup}
+              onSubmit={handleSignup}
             >
               <input
                 type="email"
@@ -143,12 +186,12 @@ const handleSocialSignup = (provider) => {
               <button
                 type="submit"
                 className="h-12 rounded-md border border-indigo-500 text-indigo-600 text-sm font-medium shadow-sm hover:bg-indigo-50 transition"
+                disabled={loading}
               >
-                Sign up with Email
+                {loading ? "Signing up..." : "Sign Up"}
               </button>
             </form>
 
-            {/* Footer Links */}
             <p className="text-xs text-center text-zinc-700 mb-6">
               Already have an account?{" "}
               <Link
@@ -158,7 +201,6 @@ const handleSocialSignup = (provider) => {
                 Login
               </Link>
             </p>
-
             <p className="text-xs text-zinc-700">
               By signing up, you agree to our{" "}
               <Link
@@ -180,7 +222,7 @@ const handleSocialSignup = (provider) => {
         </section>
       </main>
       <Footer />
-      <CustomCursor />  
+      <CustomCursor />
     </>
   );
 }
