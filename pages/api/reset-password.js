@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
-// import your DB connection here
-import db from "../../lib/db"; // adjust path as needed
+// Import your database connection
+import db from "../../lib/firebase.js"; // adjust path if needed
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -10,7 +10,12 @@ export default async function handler(req, res) {
   try {
     const { email, otp, newPassword } = req.body;
 
-    // 1. Check user exists
+    // Validate input
+    if (!email || !otp || !newPassword) {
+      return res.status(400).json({ error: "Email, OTP, and new password are required" });
+    }
+
+    // 1. Check if user exists
     const user = await db.user.findUnique({ where: { email } });
     if (!user) {
       return res.status(404).json({ error: "User not found" });
@@ -21,17 +26,18 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Invalid OTP" });
     }
 
-    // 3. Hash new password
-    const hashed = await bcrypt.hash(newPassword, 10);
+    // 3. Hash the new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-    // 4. Update password & clear OTP
+    // 4. Update password and clear OTP
     await db.user.update({
       where: { email },
-      data: { password: hashed, otp: null },
+      data: { password: hashedPassword, otp: null },
     });
 
     return res.status(200).json({ message: "Password reset successful" });
-  } catch (err) {
+  } catch (error) {
+    console.error("Reset password error:", error);
     return res.status(500).json({ error: "Server error" });
   }
 }

@@ -202,7 +202,7 @@ export default function Login() {
 
             <p className="text-xs text-center text-zinc-700 mt-6">
               Forgot your password?{" "}
-              <Link href="/reset-password" className="text-blue-600 hover:underline">
+              <Link href="/reset-pass" className="text-blue-600 hover:underline">
                 Reset
               </Link>
             </p>
