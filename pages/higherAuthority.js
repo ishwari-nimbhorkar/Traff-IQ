@@ -12,7 +12,6 @@ import Aipower from "@/components/Aipower";
 import CustomCursor from "@/components/CustomCursor";
 import Metadata from "@/components/metadata";
 import Asearch from "@/components/Asearch";
-import Map from "@/components/map"
 
 
 
@@ -33,7 +32,6 @@ export default function Home() {
       {/* Main Content */}
       <main id="hero" className="text-black">
         <Asearch />
-        <Map />
       </main>
 
       {/* Footer */}
