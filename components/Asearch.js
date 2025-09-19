@@ -75,10 +75,11 @@ const Hero = ({ onSearch, mapRef }) => {
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [searchedCity, setSearchedCity] = useState("");
+  const [manualInput, setManualInput] = useState(false); // <-- NEW
 
   // Detect user location on load (offline search using dataset)
   useEffect(() => {
-    if (navigator.geolocation) {
+    if (navigator.geolocation && !manualInput) {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
           const lat = pos.coords.latitude;
@@ -99,23 +100,26 @@ const Hero = ({ onSearch, mapRef }) => {
             }
           });
 
-          // ✅ Set search input and trigger search
-          setQuery(closestCity.name);
-          setSearchedCity(closestCity.name);
-          setLoading(false);
-          if (onSearch) onSearch({ city: closestCity.name });
+          // ✅ Set search input and trigger search only if user has not typed manually
+          if (!manualInput) {
+            setQuery(closestCity.name);
+            setSearchedCity(closestCity.name);
+            if (onSearch) onSearch({ city: closestCity.name });
 
-          // ✅ Center map and add marker
-          if (window.google && mapRef.current) {
-            mapRef.current.setCenter({ lat: closestCity.lat, lng: closestCity.lng });
-            mapRef.current.setZoom(12);
+            // ✅ Center map and add marker
+            if (window.google && mapRef.current) {
+              mapRef.current.setCenter({ lat: closestCity.lat, lng: closestCity.lng });
+              mapRef.current.setZoom(12);
 
-            new google.maps.Marker({
-              position: { lat: closestCity.lat, lng: closestCity.lng },
-              map: mapRef.current,
-              title: closestCity.name,
-            });
+              new google.maps.Marker({
+                position: { lat: closestCity.lat, lng: closestCity.lng },
+                map: mapRef.current,
+                title: closestCity.name,
+              });
+            }
           }
+
+          setLoading(false);
         },
         (err) => {
           console.warn("Location permission denied:", err);
@@ -125,7 +129,7 @@ const Hero = ({ onSearch, mapRef }) => {
     } else {
       setLoading(false);
     }
-  }, [onSearch, mapRef]);
+  }, [onSearch, mapRef, manualInput]);
 
   const handleSearchClick = () => {
     if (!query.trim()) return;
@@ -140,7 +144,7 @@ const Hero = ({ onSearch, mapRef }) => {
           <h1 className="text-[40px] font-semibold leading-tight tracking-wide mb-6 font-poppins">
             {searchedCity ? (
               <>
-                <span className="text-red-600 font-cy-poppins ">{searchedCity}</span>, India live
+                <span className="text-red-600 font-poppins ">{searchedCity}</span>, India live
                 traffic update
               </>
             ) : (
@@ -159,7 +163,10 @@ const Hero = ({ onSearch, mapRef }) => {
                 placeholder="Search by City..."
                 aria-label="Search location"
                 value={loading ? "Detecting location..." : query}
-                onChange={(e) => setQuery(e.target.value)}
+                onChange={(e) => {
+                  setQuery(e.target.value);
+                  setManualInput(true); // <-- NEW: mark manual input
+                }}
                 disabled={loading}
                 className="flex-1 h-12 px-5 text-gray-900 bg-white border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent placeholder-gray-400 font-poppins"
               />
@@ -283,7 +290,7 @@ export default function MapPage() {
         <div id="map" className="w-full h-full" />
 
         {/* Delay Legend */}
-        <div className="absolute bottom-4 text-[12px] right-5 z-40">
+        <div className="absolute bottom-4 text-[12px] right-5 z-50">
           <div className="flex rounded-full font-poppins overflow-hidden shadow-lg">
             <div className="px-2 py-2 bg-red-600 text-white font-medium">
               Major delay
