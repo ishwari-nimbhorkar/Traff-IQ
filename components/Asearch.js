@@ -283,7 +283,7 @@ export default function MapPage() {
         <div id="map" className="w-full h-full" />
 
         {/* Delay Legend */}
-        <div className="absolute bottom-4 text-[12px] right-5 z-50">
+        <div className="absolute bottom-4 text-[12px] right-5 z-40">
           <div className="flex rounded-full font-poppins overflow-hidden shadow-lg">
             <div className="px-2 py-2 bg-red-600 text-white font-medium">
               Major delay
