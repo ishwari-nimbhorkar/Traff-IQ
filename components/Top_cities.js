@@ -141,16 +141,16 @@ export default function SlowestCitiesTable() {
     <div className="container mx-auto px-4 mt-20">
       {/* Heading */}
       <div className="mb-7 md:w-3/5 w-full text-left">
-        <h2 className="text-3xl md:text-4xl font-bold leading-tight mb-4">
+        <h2 className="text-3xl md:text-4xl font-Cy-grotesk font-bold leading-tight mb-4">
           Top 10 slowest cities of 2024
         </h2>
-        <p className="text-gray-700 text-base md:text-[16px] tracking-[0.1px]">
+        <p className="text-gray-700 font-poppins text-base md:text-[16px] tracking-[0.1px]">
           We have ranked more than 500 cities based on congestion and drive times for a typical trip. Here is the top 10.
         </p>
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto relative shadow-md rounded-lg">
+      <div className="overflow-x-auto relative font-poppins shadow-md rounded-lg">
         <table className="min-w-full text-[13px] border-collapse">
           <caption className="sr-only">Top 10 slowest cities in 2024 with traffic data</caption>
           <thead className="text-gray-900 bg-gray-100 sticky top-0">

@@ -4,7 +4,10 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
-        
+       <link
+          rel="stylesheet"
+          href="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.21.0/maps/maps.css"
+        />
         <link rel="icon" href="/images/IQ-favicon-modified.png" />
       <link
           href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"

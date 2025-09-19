@@ -7,6 +7,8 @@ import { useState, useEffect, useMemo } from "react";
 export default function Navbar({ user }) {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [shadow, setShadow] = useState(false);
+    const [displayName, setDisplayName] = useState("Guest");
+
 
   // Handle scroll shadow
   useEffect(() => {
@@ -20,6 +22,18 @@ export default function Navbar({ user }) {
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Update display name when user changes
+  useEffect(() => {
+    if (user?.displayName) {
+      setDisplayName(user.name);
+    } else if (user?.email) {
+      // fallback if no name, take part before @ in email
+      setDisplayName(user.email.split("@")[0]);
+    } else {
+      setDisplayName("Guest");
+    }
+  }, [user]);
 
   // Static menu links
   const menuLinks = useMemo(
@@ -40,7 +54,7 @@ export default function Navbar({ user }) {
 
   return (
     <nav
-      className={`fixed top-0 left-0 w-full h-14 z-50 transition-shadow duration-300 bg-white shadow-lg"
+      className={`fixed top-0 left-0 w-full h-19  z-50 transition-shadow duration-300 bg-white shadow-lg"
       }`}
     >
       <div className="container mx-auto flex items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
@@ -70,7 +84,7 @@ export default function Navbar({ user }) {
             href="/login"
             className="inline-flex items-center gap-2 pr-1 pl-5 pt-1  pb-[2px] mt-[2px] text-sm font-medium text-white bg-black rounded-full hover:bg-gray-800 transition-colors"
           >
-            Hi, {user?.name || "Guest"} |
+           Hi, {displayName} |
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="text-white w-9 h-9 mt-1"

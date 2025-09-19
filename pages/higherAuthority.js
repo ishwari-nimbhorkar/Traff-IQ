@@ -1,7 +1,6 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import ProtectedRoute from "@/components/ProtectedRoute"; // Import HOC
 import Navbar from "@/components/higerAuthority_Navbar";
 import Footer from "@/components/higherAuthority_Footer";
 import Hero from "@/components/Hero";
@@ -12,6 +11,10 @@ import Features from "@/components/Features";
 import Aipower from "@/components/Aipower";
 import CustomCursor from "@/components/CustomCursor";
 import Metadata from "@/components/metadata";
+import Asearch from "@/components/Asearch";
+import Map from "@/components/map"
+
+
 
 // Lazy-loaded components for performance
 const Profiles = dynamic(() => import("@/components/Profiles"), { ssr: false });
@@ -20,25 +23,24 @@ const Aboutus = dynamic(() => import("@/components/Aboutus"), { ssr: false });
 
 export default function Home() {
   return (
-    <ProtectedRoute requiredRole="admin">
-      <>
-        {/* Metadata for SEO */}
-        <Metadata />
+    <>
+      {/* Metadata for SEO */}
+      <Metadata />
 
-        {/* Navigation */}
-        <Navbar />
+      {/* Navigation */}
+      <Navbar />
 
-        {/* Main Content */}
-        <main id="hero" className="text-black">
-          {/* Your page content goes here */}
-        </main>
+      {/* Main Content */}
+      <main id="hero" className="text-black">
+        <Asearch />
+        <Map />
+      </main>
 
-        {/* Footer */}
-        <Footer />
+      {/* Footer */}
+      <Footer />
 
-        {/* Custom Cursor */}
-        <CustomCursor />
-      </>
-    </ProtectedRoute>
+      {/* Custom Cursor */}
+      <CustomCursor />
+    </>
   );
 }
