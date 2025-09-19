@@ -140,7 +140,7 @@ const Hero = ({ onSearch, mapRef }) => {
           <h1 className="text-[40px] font-semibold leading-tight tracking-wide mb-6 font-cy-grotesk">
             {searchedCity ? (
               <>
-                <span className="text-red-600">{searchedCity}</span>, India live
+                <span className="text-red-600 font-cy-grotesk ">{searchedCity}</span>, India live
                 traffic update
               </>
             ) : (

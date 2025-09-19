@@ -9,33 +9,53 @@ import {
   signInWithPopup 
 } from "firebase/auth";
 import { auth, db } from "@/lib/firebase";
-import { doc, setDoc, updateDoc, serverTimestamp } from "firebase/firestore";
+import { doc, setDoc, updateDoc, serverTimestamp, getDoc } from "firebase/firestore";
+import { saveUserToCache } from "../utils/authCache"; // adjust path if needed
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CustomCursor from "@/components/CustomCursor";
+
+// Save or update user in Firestore and preserve roles
+const saveUser = async (user, provider) => {
+  const userRef = doc(db, "users", user.uid);
+  const userDoc = await getDoc(userRef);
+
+  let role = "user"; // default role
+
+  if (!userDoc.exists()) {
+    // New user → assign default role
+    await setDoc(userRef, {
+      uid: user.uid,
+      email: user.email || null,
+      displayName: user.displayName || "",
+      photoURL: user.photoURL || "",
+      providers: [provider],
+      roles: ["user"],
+      createdAt: serverTimestamp(),
+      lastLoginAt: serverTimestamp(),
+    });
+  } else {
+    // Existing user → preserve roles
+    const existingData = userDoc.data();
+    role = existingData.roles?.[0] || "user"; // preserve first role
+
+    await updateDoc(userRef, {
+      email: user.email || existingData.email,
+      displayName: user.displayName || existingData.displayName,
+      photoURL: user.photoURL || existingData.photoURL,
+      providers: [...new Set([...(existingData.providers || []), provider])],
+      lastLoginAt: serverTimestamp(),
+      // roles preserved → do not overwrite
+    });
+  }
+
+  return role;
+};
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-
-  // Save or update user in Firestore
-  const saveUser = async (user, provider) => {
-    await setDoc(
-      doc(db, "users", user.uid),
-      {
-        uid: user.uid,
-        email: user.email || null,
-        displayName: user.displayName || "",
-        photoURL: user.photoURL || "",
-        providers: [provider],
-        roles: ["user"],
-        createdAt: serverTimestamp(),
-        lastLoginAt: serverTimestamp(),
-      },
-      { merge: true }
-    );
-  };
 
   // Email/Password login
   const handleEmailLogin = async (e) => {
@@ -45,14 +65,35 @@ export default function Login() {
     setLoading(true);
     try {
       const { user } = await signInWithEmailAndPassword(auth, email, password);
+
+      // Update last login
       await updateDoc(doc(db, "users", user.uid), { lastLoginAt: serverTimestamp() });
+
+      // Fetch role from Firestore
+      const userDoc = await getDoc(doc(db, "users", user.uid));
+      const userData = userDoc.data();
+      const role = userData?.roles?.[0] || "user";
+
+      // ✅ Save user to localStorage for Navbar
+      saveUserToCache({
+        displayName: userData?.displayName || user.email.split("@")[0],
+        email: user.email,
+      });
+
       alert("Login successful");
-      window.location.href = "/user";
+
+      // Redirect based on role
+      if (role.toLowerCase() === "admin") {
+        window.location.href = "/higherAuthority";
+      } else {
+        window.location.href = "/user";
+      }
     } catch (err) {
       console.error(err);
       alert(err.message);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   // Google login
@@ -61,14 +102,30 @@ export default function Login() {
     try {
       const provider = new GoogleAuthProvider();
       const { user } = await signInWithPopup(auth, provider);
-      await saveUser(user, "google");
+
+      // Save/update user and get role
+      const role = await saveUser(user, "google");
+
+      // ✅ Save user to localStorage for Navbar
+      saveUserToCache({
+        displayName: user.displayName || user.email.split("@")[0],
+        email: user.email,
+      });
+
       alert("Google login successful");
-      window.location.href = "/user";
+
+      // Redirect based on role
+      if (role.toLowerCase() === "admin") {
+        window.location.href = "/higherAuthority";
+      } else {
+        window.location.href = "/user";
+      }
     } catch (err) {
       console.error(err);
       alert(err.message);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (
@@ -118,7 +175,7 @@ export default function Login() {
                 onClick={handleGoogleLogin}
                 className="flex items-center text-zinc-900 justify-center gap-3 border rounded-md text-sm font-medium px-4 py-3 shadow-sm hover:bg-gray-100 transition"
               >
-                <Image src="/images/microsoft.png" alt="Google" width={16} height={16} />
+                <Image src="/images/microsoft.png" alt="Microsoft" width={16} height={16} />
                 <span>Sign in with Microsoft</span>
               </button>
             </div>
