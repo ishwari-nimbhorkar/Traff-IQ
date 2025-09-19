@@ -137,10 +137,10 @@ const Hero = ({ onSearch, mapRef }) => {
     <section className="w-full flex items-center justify-center min-h-[620px] -mt-10 pb-20 bg-center bg-cover">
       <div className="container mx-auto px-4">
         <div className="mx-auto max-w-6xl text-center">
-          <h1 className="text-[40px] font-semibold leading-tight tracking-wide mb-6 font-cy-grotesk">
+          <h1 className="text-[40px] font-semibold leading-tight tracking-wide mb-6 font-poppins">
             {searchedCity ? (
               <>
-                <span className="text-red-600 font-cy-grotesk ">{searchedCity}</span>, India live
+                <span className="text-red-600 font-cy-poppins ">{searchedCity}</span>, India live
                 traffic update
               </>
             ) : (
