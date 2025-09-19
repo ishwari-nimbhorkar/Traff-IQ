@@ -27,7 +27,9 @@ export default function MapPage() {
           mapRef.current = tt.map({
             key: apiKey,
             container: "map",
-        
+        style:
+    "https://api.tomtom.com/style/1/basic/main.json?key=" +
+    process.env.NEXT_PUBLIC_TOMTOM_API_KEY,
             center: [77.4126, 23.2599],
             zoom: 10,
           });
