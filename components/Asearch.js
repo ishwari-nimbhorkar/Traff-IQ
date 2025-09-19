@@ -2,8 +2,8 @@
 
 import { useEffect, useState, useRef } from "react";
 import { Loader } from "@googlemaps/js-api-loader";
-import { INDIAN_STATES } from "@/pages/data/state";
-import { INDIAN_CITIES } from "@/pages/data/cities";
+import { INDIAN_STATES } from "@/data/state";
+import { INDIAN_CITIES } from "@/data/cities";
 
 // ✅ Helper to normalize Google API location objects
 function getLatLng(location) {
