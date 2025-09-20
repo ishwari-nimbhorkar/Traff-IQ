@@ -4,6 +4,10 @@ import { useEffect, useState, useRef } from "react";
 import { Loader } from "@googlemaps/js-api-loader";
 import { INDIAN_STATES } from "@/data/state";
 import { INDIAN_CITIES } from "@/data/cities";
+import Timecard from "@/components/Timecard"
+import TrafficStats from "@/components/Trafficstats";
+import TimeCalc from "@/components/TimeCalc"
+
 
 // ✅ Helper to normalize Google API location objects
 function getLatLng(location) {
@@ -16,6 +20,7 @@ function getLatLng(location) {
 // ✅ Controls Component
 function MapControls({ mapRef, trafficLayerRef }) {
   const [active, setActive] = useState("all");
+ const [city, setCity] = useState("Mumbai");
 
   return (
     <div className="absolute top-5 left-50 font-poppins text-[13px] -translate-x-1/2 z-20 flex items-center bg-white rounded-full shadow p-1 space-x-1">
@@ -77,6 +82,8 @@ const Hero = ({ onSearch, mapRef }) => {
   const [searchedCity, setSearchedCity] = useState("");
   const [lastUpdated, setLastUpdated] = useState(""); // <-- NEW
   const [manualInput, setManualInput] = useState(false);
+   const [city, setCity] = useState("Mumbai");
+
 
   // Detect user location on load (offline search using dataset)
   useEffect(() => {
@@ -209,6 +216,7 @@ const Hero = ({ onSearch, mapRef }) => {
 export default function MapPage() {
   const [query, setQuery] = useState("");
   const [flashMessage, setFlashMessage] = useState("");
+    const [currentCity, setCurrentCity] = useState("Mumbai");
   const debounceTimer = useRef(null);
   const mapRef = useRef(null);
   const markersRef = useRef([]);
@@ -279,10 +287,13 @@ export default function MapPage() {
         });
         mapRef.current.setZoom(12);
       }
+            setCurrentCity(val);
+
     }, 500);
   };
 
   return (
+  <>
     <div>
       {/* ✅ Hero with auto-location detection */}
       <Hero
@@ -321,5 +332,13 @@ export default function MapPage() {
         </div>
       </div>
     </div>
+    <Timecard /> 
+     <div className="max-w-5xl mx-auto mt-12">
+        <TrafficStats city={currentCity} />
+      </div>
+      <div>
+        <TimeCalc />
+      </div>
+    </>
   );
 }
