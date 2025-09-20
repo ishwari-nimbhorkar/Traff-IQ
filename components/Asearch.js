@@ -75,7 +75,8 @@ const Hero = ({ onSearch, mapRef }) => {
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [searchedCity, setSearchedCity] = useState("");
-  const [manualInput, setManualInput] = useState(false); // <-- NEW
+  const [lastUpdated, setLastUpdated] = useState(""); // <-- NEW
+  const [manualInput, setManualInput] = useState(false);
 
   // Detect user location on load (offline search using dataset)
   useEffect(() => {
@@ -100,15 +101,19 @@ const Hero = ({ onSearch, mapRef }) => {
             }
           });
 
-          // ✅ Set search input and trigger search only if user has not typed manually
+          // ✅ Auto set city + update time
           if (!manualInput) {
             setQuery(closestCity.name);
             setSearchedCity(closestCity.name);
+            setLastUpdated(new Date().toLocaleTimeString()); // <-- update time
             if (onSearch) onSearch({ city: closestCity.name });
 
             // ✅ Center map and add marker
             if (window.google && mapRef.current) {
-              mapRef.current.setCenter({ lat: closestCity.lat, lng: closestCity.lng });
+              mapRef.current.setCenter({
+                lat: closestCity.lat,
+                lng: closestCity.lng,
+              });
               mapRef.current.setZoom(12);
 
               new google.maps.Marker({
@@ -134,6 +139,7 @@ const Hero = ({ onSearch, mapRef }) => {
   const handleSearchClick = () => {
     if (!query.trim()) return;
     setSearchedCity(query);
+    setLastUpdated(new Date().toLocaleTimeString()); // <-- update timestamp
     if (onSearch) onSearch({ city: query });
   };
 
@@ -144,13 +150,23 @@ const Hero = ({ onSearch, mapRef }) => {
           <h1 className="text-[40px] font-semibold leading-tight tracking-wide mb-6 font-poppins">
             {searchedCity ? (
               <>
-                <span className="text-red-600 font-poppins ">{searchedCity}</span>, India live
-                traffic update
+                <span className="text-red-600 font-poppins ">
+                  {searchedCity}
+                </span>
+                , India live traffic update
               </>
             ) : (
               <>Search location, India live traffic update</>
             )}
           </h1>
+
+          {/* ✅ Last updated time */}
+          {lastUpdated && (
+            <p className="text-gray-500 text-[14px] mb-4 font-poppins">
+              Last updated: {lastUpdated}
+            </p>
+          )}
+
           <p className="text-gray-600 font-poppins text-[16px] tracking-[0.1px] max-w-5xl mx-auto">
             Real-time AI-powered traffic updates to help reduce congestion,
             optimize signals, and improve road safety.
@@ -165,7 +181,7 @@ const Hero = ({ onSearch, mapRef }) => {
                 value={loading ? "Detecting location..." : query}
                 onChange={(e) => {
                   setQuery(e.target.value);
-                  setManualInput(true); // <-- NEW: mark manual input
+                  setManualInput(true);
                 }}
                 disabled={loading}
                 className="flex-1 h-12 px-5 text-gray-900 bg-white border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent placeholder-gray-400 font-poppins"
@@ -282,7 +298,7 @@ export default function MapPage() {
         </div>
       )}
 
-      <div className="relative w-full h-[600px] max-w-7xl -mt-50 rounded-2xl overflow-hidden shadow-lg mx-auto">
+      <div className="relative w-full h-[600px] max-w-[1300px] -mt-50 rounded-2xl overflow-hidden shadow-lg mx-auto">
         {/* Floating controls */}
         <MapControls mapRef={mapRef} trafficLayerRef={trafficLayerRef} />
 
@@ -290,7 +306,7 @@ export default function MapPage() {
         <div id="map" className="w-full h-full" />
 
         {/* Delay Legend */}
-        <div className="absolute bottom-4 text-[12px] right-5 z-50">
+        <div className="absolute bottom-14 text-[13px] right-15 z-50">
           <div className="flex rounded-full font-poppins overflow-hidden shadow-lg">
             <div className="px-2 py-2 bg-red-600 text-white font-medium">
               Major delay

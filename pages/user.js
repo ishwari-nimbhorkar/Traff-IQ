@@ -14,6 +14,7 @@ import Hero from "@/components/Asearch";
 
 
 
+
 // Lazy-loaded components for performance
 const Profiles = dynamic(() => import("@/components/Profiles"), { ssr: false });
 const Book = dynamic(() => import("@/components/Book"), { ssr: false });
@@ -31,6 +32,7 @@ export default function Home() {
       {/* Main Content */}
       <main id="hero" className="text-black">
         <Hero />
+        
       </main>
 
       {/* Footer */}
