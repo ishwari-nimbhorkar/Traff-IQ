@@ -23,7 +23,7 @@ const Aboutus = dynamic(() => import("@/components/Aboutus"), { ssr: false });
 
 export default function Home() {
   return ( 
-     <ProtectedRoute requiredRole="user">
+     
 
     <>
       {/* Metadata for SEO */}
@@ -44,7 +44,6 @@ export default function Home() {
       {/* Custom Cursor */}
       <CustomCursor />
     </>
-     <ProtectedRoute />
-
+ 
   );
 }
