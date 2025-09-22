@@ -11,6 +11,7 @@ import Aipower from "@/components/Aipower";
 import CustomCursor from "@/components/CustomCursor";
 import Metadata from "@/components/metadata";
 import Hero from "@/components/Asearch";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 
 
@@ -21,7 +22,9 @@ const Book = dynamic(() => import("@/components/Book"), { ssr: false });
 const Aboutus = dynamic(() => import("@/components/Aboutus"), { ssr: false });
 
 export default function Home() {
-  return (
+  return ( 
+     <ProtectedRoute requiredRole="user">
+
     <>
       {/* Metadata for SEO */}
       <Metadata />
@@ -41,5 +44,7 @@ export default function Home() {
       {/* Custom Cursor */}
       <CustomCursor />
     </>
+     <ProtectedRoute />
+
   );
 }

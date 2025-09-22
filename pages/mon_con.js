@@ -6,6 +6,8 @@ import { Video, Activity, Power, Lightbulb } from "lucide-react";
 import ControllerPanel from '@/components/FullTrafficController';
 import UserManual from '@/components/Usermanual';
 import Footer from '@/components/higherAuthority_Footer';
+import ProtectedRoute from "@/components/ProtectedRoute";
+import CustomCursor from '@/components/CustomCursor';
 
 export default function Home() {
   
@@ -116,7 +118,10 @@ export default function Home() {
   }, []);
 
 
-  return (<>
+  return (
+     <ProtectedRoute requiredRole="Admin">
+
+  <>
   <Navbar />
     <div className="flex flex-col items-center justify-top min-h-screen font-poppins rounded-2xl mt-20  bg-white mx-7 py-12">
       
@@ -234,7 +239,11 @@ export default function Home() {
       
     </div>
     <Footer />
+         <CustomCursor />
+
   </>
+  </ProtectedRoute>
+
   );
 }
 
