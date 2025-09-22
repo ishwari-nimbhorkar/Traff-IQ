@@ -48,8 +48,7 @@ export default function Navbar({ user }) {
   const menuLinks = useMemo(() => [
     { href: "/", label: "Dashboard" },
     { href: "/features&services/#services", label: "Analytics" },
-    { href: "/features&services/#features", label: "Monitoring" },
-    { href: "/rules&laws/#laws", label: "Control" },
+    { href: "/features&services/#features", label: "Oversee" },
     { href: "/rules&laws/#rules", label: "IOT Hub" },
     { href: "/essentials/#about", label: "Violation" },
     { href: "/sitemap", label: "Emergency" },

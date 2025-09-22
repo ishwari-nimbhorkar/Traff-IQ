@@ -61,7 +61,7 @@ export default function TrafficCard() {
         Travel times, congestion levels and speeds are based on trip data<br />
     anonymously collected from drivers within the urban area throughout the
     complete <br /> road network — including fast roads and highways crossing this
-        area.
+        area.<br /> Below Data May be Inaccurate
       </div>
     </div>
   );

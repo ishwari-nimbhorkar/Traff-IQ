@@ -4,10 +4,9 @@ import { useEffect, useState, useRef } from "react";
 import { Loader } from "@googlemaps/js-api-loader";
 import { INDIAN_STATES } from "@/data/state";
 import { INDIAN_CITIES } from "@/data/cities";
-import Timecard from "@/components/Timecard"
+import Timecard from "@/components/Timecard";
 import TrafficStats from "@/components/Trafficstats";
-import TimeCalc from "@/components/TimeCalc"
-
+import TimeCalc from "@/components/TimeCalc";
 
 // ✅ Helper to normalize Google API location objects
 function getLatLng(location) {
@@ -20,16 +19,17 @@ function getLatLng(location) {
 // ✅ Controls Component
 function MapControls({ mapRef, trafficLayerRef }) {
   const [active, setActive] = useState("all");
- const [city, setCity] = useState("Mumbai");
-
-
+  const [city, setCity] = useState("Mumbai");
 
   return (
     <div className="absolute top-5 left-50 font-poppins text-[13px] -translate-x-1/2 z-20 flex items-center bg-white rounded-full shadow p-1 space-x-1">
       {/* Satellite */}
       <button
         onClick={() => {
-          mapRef.current?.setMapTypeId(google.maps.MapTypeId.SATELLITE);
+          if (mapRef.current) {
+            mapRef.current.setMapTypeId(google.maps.MapTypeId.SATELLITE);
+            if (trafficLayerRef.current) trafficLayerRef.current.setMap(mapRef.current);
+          }
           setActive("satellite");
         }}
         className={`px-4 py-2 rounded-full font-medium transition ${
@@ -82,10 +82,9 @@ const Hero = ({ onSearch, mapRef }) => {
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [searchedCity, setSearchedCity] = useState("");
-  const [lastUpdated, setLastUpdated] = useState(""); // <-- NEW
+  const [lastUpdated, setLastUpdated] = useState("");
   const [manualInput, setManualInput] = useState(false);
-   const [city, setCity] = useState("Mumbai");
-
+  const [city, setCity] = useState("Mumbai");
 
   // Detect user location on load (offline search using dataset)
   useEffect(() => {
@@ -95,7 +94,6 @@ const Hero = ({ onSearch, mapRef }) => {
           const lat = pos.coords.latitude;
           const lon = pos.coords.longitude;
 
-          // ✅ Find closest city in offline dataset
           const dataset = [...INDIAN_STATES, ...INDIAN_CITIES];
           let closestCity = dataset[0];
           let minDistance = Infinity;
@@ -110,14 +108,12 @@ const Hero = ({ onSearch, mapRef }) => {
             }
           });
 
-          // ✅ Auto set city + update time
           if (!manualInput) {
             setQuery(closestCity.name);
             setSearchedCity(closestCity.name);
-            setLastUpdated(new Date().toLocaleTimeString()); // <-- update time
+            setLastUpdated(new Date().toLocaleTimeString());
             if (onSearch) onSearch({ city: closestCity.name });
 
-            // ✅ Center map and add marker
             if (window.google && mapRef.current) {
               mapRef.current.setCenter({
                 lat: closestCity.lat,
@@ -148,7 +144,7 @@ const Hero = ({ onSearch, mapRef }) => {
   const handleSearchClick = () => {
     if (!query.trim()) return;
     setSearchedCity(query);
-    setLastUpdated(new Date().toLocaleTimeString()); // <-- update timestamp
+    setLastUpdated(new Date().toLocaleTimeString());
     if (onSearch) onSearch({ city: query });
   };
 
@@ -159,9 +155,7 @@ const Hero = ({ onSearch, mapRef }) => {
           <h1 className="text-[40px] font-semibold leading-tight tracking-wide mb-6 font-poppins">
             {searchedCity ? (
               <>
-                <span className="text-red-600 font-poppins ">
-                  {searchedCity}
-                </span>
+                <span className="text-red-600 font-poppins">{searchedCity}</span>
                 , India live traffic update
               </>
             ) : (
@@ -169,7 +163,6 @@ const Hero = ({ onSearch, mapRef }) => {
             )}
           </h1>
 
-          {/* ✅ Last updated time */}
           {lastUpdated && (
             <p className="text-gray-500 text-[14px] mb-4 font-poppins">
               Last updated: {lastUpdated}
@@ -218,8 +211,7 @@ const Hero = ({ onSearch, mapRef }) => {
 export default function MapPage() {
   const [query, setQuery] = useState("");
   const [flashMessage, setFlashMessage] = useState("");
-    const [currentCity, setCurrentCity] = useState("Mumbai");
-     const [statsKey, setStatsKey] = useState(0);
+  const [currentCity, setCurrentCity] = useState("Mumbai");
   const debounceTimer = useRef(null);
   const mapRef = useRef(null);
   const markersRef = useRef([]);
@@ -234,13 +226,22 @@ export default function MapPage() {
       });
 
       loader.load().then(() => {
+        // 1️⃣ Create map with Satellite view
         mapRef.current = new google.maps.Map(document.getElementById("map"), {
           center: { lat: 20.933, lng: 77.751 }, // Default Amravati
           zoom: 6,
+          mapTypeId: google.maps.MapTypeId.SATELLITE,
         });
 
+        // 2️⃣ Create traffic layer
         trafficLayerRef.current = new google.maps.TrafficLayer();
-        trafficLayerRef.current.setMap(mapRef.current);
+
+        // 3️⃣ Attach traffic layer after tiles are loaded
+        mapRef.current.addListener("tilesloaded", () => {
+          if (trafficLayerRef.current && mapRef.current) {
+            trafficLayerRef.current.setMap(mapRef.current);
+          }
+        });
       });
     }
   }, []);
@@ -290,54 +291,53 @@ export default function MapPage() {
         });
         mapRef.current.setZoom(12);
       }
-            setCurrentCity(val);
-            setStatsKey((prev) => prev + 1);
+      setCurrentCity(val);
     }, 500);
   };
 
   return (
-  <>
-    <div>
-      {/* ✅ Hero with auto-location detection */}
-      <Hero
-        mapRef={mapRef}
-        onSearch={(loc) => {
-          if (loc.city) handleSearch(loc.city);
-        }}
-      />
+    <>
+      <div>
+        {/* ✅ Hero with auto-location detection */}
+        <Hero
+          mapRef={mapRef}
+          onSearch={(loc) => {
+            if (loc.city) handleSearch(loc.city);
+          }}
+        />
 
-      {flashMessage && (
-        <div className="max-w-5xl mx-auto mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-xl text-center">
-          {flashMessage}
-        </div>
-      )}
+        {flashMessage && (
+          <div className="max-w-5xl mx-auto mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-xl text-center">
+            {flashMessage}
+          </div>
+        )}
 
-      <div className="relative w-full h-[600px] max-w-[1300px] -mt-50 rounded-2xl overflow-hidden shadow-lg mx-auto">
-        {/* Floating controls */}
-        <MapControls mapRef={mapRef} trafficLayerRef={trafficLayerRef} />
+        <div className="relative w-full h-[600px] max-w-[1300px] -mt-50 rounded-2xl overflow-hidden shadow-lg mx-auto">
+          {/* Floating controls */}
+          <MapControls mapRef={mapRef} trafficLayerRef={trafficLayerRef} />
 
-        {/* Map */}
-        <div id="map" className="w-full h-full" />
+          {/* Map */}
+          <div id="map" className="w-full h-full" />
 
-        {/* Delay Legend */}
-        <div className="absolute bottom-14 text-[13px] right-15 z-40">
-          <div className="flex rounded-full font-poppins overflow-hidden shadow-lg">
-            <div className="px-2 py-2 bg-red-600 text-white font-medium">
-              Major delay
-            </div>
-            <div className="px-2 py-2 bg-yellow-400 text-gray-800 font-medium">
-              Minor delay
-            </div>
-            <div className="px-2 py-2 bg-green-600 text-white font-medium">
-              No delay
+          {/* Delay Legend */}
+          <div className="absolute bottom-14 text-[13px] right-15 z-50">
+            <div className="flex rounded-full font-poppins overflow-hidden shadow-lg">
+              <div className="px-2 py-2 bg-red-600 text-white font-medium">
+                Major delay
+              </div>
+              <div className="px-2 py-2 bg-yellow-400 text-gray-800 font-medium">
+                Minor delay
+              </div>
+              <div className="px-2 py-2 bg-green-600 text-white font-medium">
+                No delay
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <Timecard /> 
-     <div className="max-w-5xl mx-auto mt-12">
-        <TrafficStats key={statsKey} />
+      <Timecard />
+      <div className="max-w-5xl mx-auto mt-12">
+        <TrafficStats city={currentCity} />
       </div>
       <div>
         <TimeCalc />
