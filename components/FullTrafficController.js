@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback, useRef } from "react";
+import ProtectedRoute from "./ProtectedRoute";
 
 // Simulated camera congestion for each lane
 const initialCamData = [
@@ -250,6 +251,8 @@ export default function ControllerPanel({ camData }) {
 
   // =================== RENDER ===================
   return (
+    <ProtectedRoute requiredRole="Admin">
+
     <>
       <div className="flex gap-6 mb-6 justify-between">
         {[1,2,3,4].map((lane)=>{
@@ -313,5 +316,7 @@ export default function ControllerPanel({ camData }) {
         </p>
       </div>
     </>
+        </ProtectedRoute>
+
   );
 }
