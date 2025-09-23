@@ -47,13 +47,13 @@ export default function Navbar({ user }) {
 
   const menuLinks = useMemo(() => [
     { href: "/", label: "Dashboard" },
-    { href: "/features&services/#services", label: "Analytics" },
-    { href: "/features&services/#features", label: "Monitoring" },
-    { href: "/rules&laws/#laws", label: "Control" },
-    { href: "/rules&laws/#rules", label: "IOT Hub" },
-    { href: "/essentials/#about", label: "Violation" },
-    { href: "/sitemap", label: "Emergency" },
-    { href: "/essentials/#help", label: "Zone" },
+    { href: "/features&services/#services", label: "Smart Nav" },
+    { href: "/features&services/#features", label: "Report Issue" },
+    { href: "/rules&laws/#laws", label: "Alerts" },
+    { href: "/rules&laws/#rules", label: "Planner" },
+    { href: "/essentials/#about", label: "Insights" },
+    { href: "/sitemap", label: "Community" },
+    { href: "/essentials/#help", label: "Emergency" },
   ], []);
 
   const toggleMobileMenu = () => setIsMobileOpen(prev => !prev);
