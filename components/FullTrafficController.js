@@ -1,8 +1,4 @@
-
-import { useEffect, useState, useCallback } from "react";
-import { useRef } from "react";
-
-
+import { useEffect, useState, useCallback, useRef } from "react";
 
 // Simulated camera congestion for each lane
 const initialCamData = [
@@ -33,22 +29,35 @@ export default function ControllerPanel({ camData }) {
   const [allRed, setAllRed] = useState(false);
   const [flashMode, setFlashMode] = useState(false);
 
-  const [lanePhases, setLanePhases] = useState([0, 0, 0, 0]); // 0=Red, 1=Green, 2=Yellow
+  const [lanePhases, setLanePhases] = useState([0, 0, 0, 0]); // 0=Red,1=Green,2=Yellow
   const [flashOn, setFlashOn] = useState(true);
-   const clickSound = useRef(null);
 
+  const clickSound = useRef(null);
 
- useEffect(() => {
-  clickSound.current = new Audio("/music/beep.mp3"); // put beep.mp3 in /public
-}, []);
+  // Refs for loop state to prevent freezing
+  const controlModeRef = useRef(controlModeIndex);
+  const manualStepRef = useRef(manualStepCount);
+  useEffect(() => { controlModeRef.current = controlModeIndex; }, [controlModeIndex]);
+  useEffect(() => { manualStepRef.current = manualStepCount; }, [manualStepCount]);
+
+  // Sound for button clicks
+  let soundPlaying = false;
+  const playClickSound = () => {
+    if (!clickSound.current) return;
+    if (soundPlaying) return;
+    soundPlaying = true;
+    clickSound.current.currentTime = 0;
+    clickSound.current.play().finally(() => { soundPlaying = false; });
+  };
+
+  useEffect(() => { clickSound.current = new Audio("/music/beep.mp3"); }, []);
 
   const doAction = useCallback((label) => {
-  playClickSound(); // play sound on every action
-  setLastAction(label);
-  setPressedKey(label);
-  setTimeout(() => setPressedKey(null), 220);
-}, []);
-
+    playClickSound();
+    setLastAction(label);
+    setPressedKey(label);
+    setTimeout(() => setPressedKey(null), 220);
+  }, []);
 
   const resetSignalOverrides = () => {
     setForceGreen(false);
@@ -60,18 +69,14 @@ export default function ControllerPanel({ camData }) {
   // =================== ACTION FUNCTIONS ===================
   const togglePower = () => { setPowerOn(s => !s); doAction("Power Switch"); };
   const toggleSignals = () => { setSignalsOn(s => !s); doAction("Signal On/Off"); };
-
   const manualStep = () => {
-    // Set Control Mode and Signal Mode to Manual
     const manualIndex = controlModes.indexOf("Manual");
     if (manualIndex >= 0) setControlModeIndex(manualIndex);
     const signalManualIndex = signalModes.indexOf("Manual");
     if (signalManualIndex >= 0) setSignalModeIndex(signalManualIndex);
-
-    setManualStepCount(c => c + 1); 
+    setManualStepCount(c => c + 1);
     doAction("Manual Step");
   };
-
   const toggleControlMode = () => { setControlModeIndex(i => (i + 1) % controlModes.length); doAction("Toggle Control Mode"); };
   const toggleSignalMode = () => { setSignalModeIndex(i => (i + 1) % signalModes.length); doAction("Toggle Signal Mode"); };
   const toggleEmergency = () => { setEmergencyActive(s => !s); doAction("Emergency Override"); };
@@ -89,21 +94,6 @@ export default function ControllerPanel({ camData }) {
     if (flashMode) { setFlashMode(false); doAction("Flash Mode OFF"); } 
     else { resetSignalOverrides(); setFlashMode(true); doAction("Flash Mode"); }
   };
-
-  // Sound for button clicks
- // put your sound file in /public folder
-let soundPlaying = false;
-
-const playClickSound = () => {
-  if (!clickSound.current) return;
-  if (soundPlaying) return;
-  soundPlaying = true;
-  clickSound.current.currentTime = 0;
-  clickSound.current.play().finally(() => {
-    soundPlaying = false;
-  });
-};
-
 
   // =================== KEYBOARD BINDINGS ===================
   useEffect(() => {
@@ -131,100 +121,73 @@ const playClickSound = () => {
       }
       e.preventDefault();
     };
-    window.addEventListener("keydown",onKeyDown);
-    return()=>window.removeEventListener("keydown",onKeyDown);
-  }, []);
+    window.addEventListener("keydown", onKeyDown);
+    return()=>window.removeEventListener("keydown", onKeyDown);
+  }, [togglePower,toggleSignals,manualStep,toggleControlMode,toggleSignalMode,toggleEmergency,sendHelp,cycleReset,toggleTestMode,togglePhaseHold,toggleForceGreen,toggleForceYellow,toggleForceRed,toggleAllRed,toggleDetectorBypass,toggleFlashMode]);
 
+  // =================== TRAFFIC LIGHT CYCLE ===================
+  useEffect(() => {
+    if (!powerOn || !signalsOn || phaseHold || flashMode) return;
 
-  
-  // =================== DYNAMIC LANE LOGIC ===================
- // =================== TRAFFIC LIGHT CYCLE ===================
-useEffect(() => {
-  if (!powerOn || !signalsOn || phaseHold || flashMode) return;
+    let isRunning = true;
 
-  let isRunning = true;
+    const cycleController = async () => {
+      let currentGroup = 0; // 0 = lanes 1+3, 1 = lanes 2+4
+      while (isRunning) {
+        const mode = controlModeRef.current;
+        const step = manualStepRef.current;
 
-  const cycleController = async () => {
-    let currentGroup = 0; // 0 = lanes 1+3, 1 = lanes 2+4
+        // Manual Mode → wait for step
+        if (controlModes[mode] === "Manual") {
+          await new Promise((resolve) => {
+            const check = setInterval(() => {
+              if (!isRunning) return clearInterval(check);
+              if (manualStepRef.current !== step) { clearInterval(check); resolve(); }
+            }, 200);
+          });
+        }
 
-    while (isRunning) {
-      // Handle Manual Mode
-      if (controlModes[controlModeIndex] === "Manual") {
-        await new Promise((resolve) => {
-          let lastStep = manualStepCount;
-          const check = setInterval(() => {
-            if (!isRunning) return clearInterval(check);
-            if (manualStepCount !== lastStep) {
-              clearInterval(check);
-              resolve();
-            }
-          }, 200);
-        });
+        // Timing
+        let greenTime=10000, yellowTime=4000, redTime=2000;
+        if(controlModes[mode]==="Adaptive"){ greenTime=currentGroup===0?12000:8000; yellowTime=4000; redTime=2000; }
+        if(controlModes[mode]==="Fixed"){ greenTime=20000; yellowTime=5000; redTime=3000; }
+        if(controlModes[mode]==="Actuated"){ greenTime=currentGroup===0?18000:7000; yellowTime=5000; redTime=3000; }
+
+        // GREEN
+        setLanePhases([
+          currentGroup===0?1:0,
+          currentGroup===1?1:0,
+          currentGroup===0?1:0,
+          currentGroup===1?1:0,
+        ]);
+        await new Promise(r=>setTimeout(r, greenTime));
+        if(!isRunning) return;
+
+        // YELLOW
+        setLanePhases([
+          currentGroup===0?2:0,
+          currentGroup===1?2:0,
+          currentGroup===0?2:0,
+          currentGroup===1?2:0,
+        ]);
+        await new Promise(r=>setTimeout(r, yellowTime));
+        if(!isRunning) return;
+
+        // ALL RED
+        setLanePhases([0,0,0,0]);
+        await new Promise(r=>setTimeout(r, redTime));
+        if(!isRunning) return;
+
+        // SWITCH GROUP
+        if(controlModes[controlModeRef.current]!=="Manual") currentGroup=(currentGroup+1)%2;
       }
+    };
 
-      // === TIMING CALC ===
-      let greenTime = 10000, yellowTime = 4000, redTime = 2000;
+    cycleController();
+    return ()=>{ isRunning=false; };
+  }, [powerOn, signalsOn, phaseHold, flashMode]);
 
-      if (controlModes[controlModeIndex] === "Adaptive") {
-        // Adaptive → vary green slightly between cycles
-        greenTime = currentGroup === 0 ? 12000 : 8000;
-        yellowTime = 4000;
-        redTime = 2000;
-      }
-
-      if (controlModes[controlModeIndex] === "Fixed") {
-        greenTime = 20000;
-        yellowTime = 5000;
-        redTime = 3000;
-      }
-
-      if (controlModes[controlModeIndex] === "Actuated") {
-        // Actuated → one group longer, other shorter
-        greenTime = currentGroup === 0 ? 18000 : 7000;
-        yellowTime = 5000;
-        redTime = 3000;
-      }
-
-      // === GREEN PHASE ===
-      setLanePhases([
-        currentGroup === 0 ? 1 : 0, // lane 1
-        currentGroup === 1 ? 1 : 0, // lane 2
-        currentGroup === 0 ? 1 : 0, // lane 3
-        currentGroup === 1 ? 1 : 0, // lane 4
-      ]);
-      await new Promise((r) => setTimeout(r, greenTime));
-      if (!isRunning) return;
-
-      // === YELLOW PHASE ===
-      setLanePhases([
-        currentGroup === 0 ? 2 : 0,
-        currentGroup === 1 ? 2 : 0,
-        currentGroup === 0 ? 2 : 0,
-        currentGroup === 1 ? 2 : 0,
-      ]);
-      await new Promise((r) => setTimeout(r, yellowTime));
-      if (!isRunning) return;
-
-      // === ALL RED PHASE ===
-      setLanePhases([0, 0, 0, 0]);
-      await new Promise((r) => setTimeout(r, redTime));
-      if (!isRunning) return;
-
-      // === SWITCH GROUP ===
-      if (controlModes[controlModeIndex] !== "Manual") {
-        currentGroup = (currentGroup + 1) % 2;
-      }
-    }
-  };
-
-  cycleController();
-
-  return () => {
-    isRunning = false;
-  };
-}, [powerOn, signalsOn, phaseHold, flashMode, controlModeIndex, manualStepCount]);
-
-
+  // =================== FLASH MODE ===================
   useEffect(()=>{
     if(!flashMode) return;
     const flashInterval = setInterval(()=>setFlashOn(f=>!f),500);
@@ -285,9 +248,9 @@ useEffect(() => {
     );
   };
 
+  // =================== RENDER ===================
   return (
     <>
-      {/* Lane Lights */}
       <div className="flex gap-6 mb-6 justify-between">
         {[1,2,3,4].map((lane)=>{
           const colors = computeLaneColor(lane);
@@ -303,7 +266,7 @@ useEffect(() => {
           );
         })}
       </div>
- {/* Buttons & Status */}
+
       <div className="max-w-5xl mx-auto p-6">
         <div className="flex gap-4 mb-6">
           <div className="flex-1 p-4 bg-gray-50 rounded-lg shadow-inner"><div className="text-xs text-gray-600">Power</div><div className="mt-2 text-xl text-gray-900 font-bold">{powerOn ? "ON" : "OFF"}</div></div>
@@ -312,9 +275,8 @@ useEffect(() => {
           <div className="flex-1 p-4 bg-gray-50 rounded-lg shadow-inner"><div className="text-xs text-gray-600">Signal Mode</div><div className="mt-2 text-xl text-gray-900 font-bold">{signalModes[signalModeIndex]}</div></div>
           <div className="flex-1 p-4 bg-gray-50 rounded-lg shadow-inner"><div className="text-xs text-gray-600">Emergency</div><div className="mt-2 text-xl text-gray-900 font-bold">{emergencyActive ? "ACTIVE" : "Idle"}</div></div>
         </div>
-</div>
+      </div>
 
-      {/* Controller Buttons */}
       <div className="max-w-5xl mx-auto p-6">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
           <ControllerButton id="power" label="Power Switch" sub={powerOn?"ON":"OFF"} onClick={togglePower} styleObj={styles.power} keyboardKey="P" active={powerOn}/>
@@ -326,7 +288,7 @@ useEffect(() => {
           <ControllerButton id="send" label="Help" sub="Send Help" onClick={sendHelp} styleObj={styles.send} keyboardKey="D"/>
           <ControllerButton id="cycle" label="Cycle Reset" sub="Reset Cycle" onClick={cycleReset} styleObj={styles.reset} keyboardKey="C"/>
           <ControllerButton id="test" label="Test Mode" sub={testMode?"ON":"OFF"} onClick={toggleTestMode} styleObj={styles.test} keyboardKey="X" active={testMode}/>
-          <ControllerButton id="hold" label="Phase Hold" sub="P/H" sub={phaseHold?"ON":"OFF"} onClick={togglePhaseHold} styleObj={styles.hold} keyboardKey="H" active={phaseHold}/>
+          <ControllerButton id="hold" label="Phase Hold"  sub={phaseHold?"ON":"OFF"} onClick={togglePhaseHold} styleObj={styles.hold} keyboardKey="H" active={phaseHold}/>
           <ControllerButton id="forceGreen" label="Force Green" sub="F Green" onClick={toggleForceGreen} styleObj={styles.forceGreen} keyboardKey="G" active={forceGreen}/>
           <ControllerButton id="forceYellow" label="Force Yellow" sub="F Yellow" onClick={toggleForceYellow} styleObj={styles.forceYellow} keyboardKey="Y" active={forceYellow}/>
           <ControllerButton id="forceRed" label="Force Red" sub="F Red" onClick={toggleForceRed} styleObj={styles.forceRed} keyboardKey="R" active={forceRed}/>
@@ -334,25 +296,22 @@ useEffect(() => {
           <ControllerButton id="bypass" label="Detector Bypass" sub="By-pass" onClick={toggleDetectorBypass} styleObj={styles.bypass} keyboardKey="B" active={detectorBypass}/>
           <ControllerButton id="flash" label="Flash Mode" sub="Flash" onClick={toggleFlashMode} styleObj={styles.flash} keyboardKey="F" active={flashMode}/>
         </div>
+
         <div className="mt-4 p-4 rounded-lg bg-white shadow-md flex items-center justify-between">
-        <div>
-          <div className="text-xs text-gray-500">Last Action</div>
-          <div className="text-sm font-medium">{lastAction}</div>
+          <div>
+            <div className="text-xs text-gray-500">Last Action</div>
+            <div className="text-sm font-medium">{lastAction}</div>
+          </div>
+          <div className="text-right">
+            <div className="text-xs text-gray-500">Manual Steps</div>
+            <div className="text-sm font-medium">{manualStepCount}</div>
+          </div>
         </div>
-        <div className="text-right">
-          <div className="text-xs text-gray-500">Manual Steps</div>
-          <div className="text-sm font-medium">{manualStepCount}</div>
-        </div>
+
+        <p className="mt-3 text-xs text-gray-500">
+          Shortcuts: P,O,M,T,S,E,D,C,X,H,G,Y,R,A,B,F
+        </p>
       </div>
-
-      <p className="mt-3 text-xs text-gray-500">
-        Shortcuts: P,O,M,T,S,E,D,C,X,H,G,Y,R,A,B,F
-      </p>   </div>   </>
-      
+    </>
   );
-  
 }
-
-      
-    
-    
