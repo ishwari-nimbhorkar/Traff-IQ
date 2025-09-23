@@ -9,7 +9,7 @@ export default function UserManual() {
       </p>
 
       {/* Three-column layout */}
-      <div className="grid md:grid-cols-3 gap-8">
+      <div className="grid md:grid-cols-3 pb-6 gap-8">
         {/* Column 1 */}
         <div className="space-y-6">
           <section>
@@ -99,8 +99,36 @@ export default function UserManual() {
               <li>Pedestrian → Pedestrian Mode</li>
             </ul>
           </section>
-        </div>
+            </div>
+            </div>
+            
+<div  className=" border-t-1 pt-7 border-gray-600">
+<section>
+  <p className="text-lg font-semibold mb-2">Signal Modes</p>
+  <ul className="list-disc list-inside text-sm space-y-1 text-gray-700">
+    <li>
+      <strong>Fixed Mode:</strong> Signals change on a fixed timer. Green: 20s → Yellow: 5s → All Red: 3s. Lanes 1 & 3 go first, then 2 & 4.
+    </li>
+    <li>
+      <strong>Adaptive Mode:</strong> Signal times adjust dynamically based on traffic load. Group A (Lanes 1 & 3): Green 12s. Group B (Lanes 2 & 4): Green 8s. Yellow 4s, All Red 2s.
+    </li>
+    <li>
+      <strong>Actuated Mode:</strong> Green time depends on vehicle presence (sensors). Group A: Green 18s, Group B: Green 7s. Yellow 5s, All Red 3s.
+    </li>
+    <li>
+      <strong>Manual Mode:</strong> Operator steps through phases. Green → Yellow → All Red → Switch group. Useful for emergencies or police-controlled junctions.
+    </li>
+  </ul>
+</section>
+          
+      
       </div>
+
+     
+
+    
     </div>
+
+  
   );
 }

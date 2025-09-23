@@ -138,84 +138,93 @@ const playClickSound = () => {
 
   
   // =================== DYNAMIC LANE LOGIC ===================
-  useEffect(() => {
-  // Skip lane updates if power off, signals off, phase hold, manual step, or flash mode active
-  if (!powerOn || !signalsOn || phaseHold || manualStepCount > 0 || flashMode) return;
+ // =================== TRAFFIC LIGHT CYCLE ===================
+useEffect(() => {
+  if (!powerOn || !signalsOn || phaseHold || flashMode) return;
 
-  // Array to track timers for each lane (optional for future use)
-  let laneTimers = [null, null, null, null];
+  let isRunning = true;
 
-  // Function to update a single lane based on camData and control mode
-  const updateLane = (i) => {
-    // Ensure camData exists and has congestion info
-    if (!camData || !camData[i] || !camData[i].congestion) return;
+  const cycleController = async () => {
+    let currentGroup = 0; // 0 = lanes 1+3, 1 = lanes 2+4
 
-    const level = camData[i].congestion.toLowerCase(); // use camData from state/props
-    let greenDuration = 1000; // default green duration
+    while (isRunning) {
+      // Handle Manual Mode
+      if (controlModes[controlModeIndex] === "Manual") {
+        await new Promise((resolve) => {
+          let lastStep = manualStepCount;
+          const check = setInterval(() => {
+            if (!isRunning) return clearInterval(check);
+            if (manualStepCount !== lastStep) {
+              clearInterval(check);
+              resolve();
+            }
+          }, 200);
+        });
+      }
 
-    // Determine green duration based on control mode
-    switch (controlModes[controlModeIndex]) {
-      case "Adaptive":
-        // Adaptive: duration depends on congestion
-        if (level === "low") greenDuration = 2000;       // short green
-        else if (level === "medium") greenDuration = 4000; // medium green
-        else if (level === "high") greenDuration = 6000;   // long green
-        break;
+      // === TIMING CALC ===
+      let greenTime = 10000, yellowTime = 4000, redTime = 2000;
 
-      case "Fixed":
-        // Fixed: same duration for all lanes
-        greenDuration = 4000;
-        break;
+      if (controlModes[controlModeIndex] === "Adaptive") {
+        // Adaptive → vary green slightly between cycles
+        greenTime = currentGroup === 0 ? 12000 : 8000;
+        yellowTime = 4000;
+        redTime = 2000;
+      }
 
-      case "Manual":
-        // Manual: short green, user steps manually
-        greenDuration = 2000;
-        break;
+      if (controlModes[controlModeIndex] === "Fixed") {
+        greenTime = 20000;
+        yellowTime = 5000;
+        redTime = 3000;
+      }
 
-      case "Actuated":
-        // Actuated: react to congestion with min/max limits
-        if (level === "high") greenDuration = 6000;
-        else if (level === "medium") greenDuration = 3500;
-        else greenDuration = 2000;
-        break;
+      if (controlModes[controlModeIndex] === "Actuated") {
+        // Actuated → one group longer, other shorter
+        greenTime = currentGroup === 0 ? 18000 : 7000;
+        yellowTime = 5000;
+        redTime = 3000;
+      }
 
-      default:
-        greenDuration = 3000; // fallback
+      // === GREEN PHASE ===
+      setLanePhases([
+        currentGroup === 0 ? 1 : 0, // lane 1
+        currentGroup === 1 ? 1 : 0, // lane 2
+        currentGroup === 0 ? 1 : 0, // lane 3
+        currentGroup === 1 ? 1 : 0, // lane 4
+      ]);
+      await new Promise((r) => setTimeout(r, greenTime));
+      if (!isRunning) return;
+
+      // === YELLOW PHASE ===
+      setLanePhases([
+        currentGroup === 0 ? 2 : 0,
+        currentGroup === 1 ? 2 : 0,
+        currentGroup === 0 ? 2 : 0,
+        currentGroup === 1 ? 2 : 0,
+      ]);
+      await new Promise((r) => setTimeout(r, yellowTime));
+      if (!isRunning) return;
+
+      // === ALL RED PHASE ===
+      setLanePhases([0, 0, 0, 0]);
+      await new Promise((r) => setTimeout(r, redTime));
+      if (!isRunning) return;
+
+      // === SWITCH GROUP ===
+      if (controlModes[controlModeIndex] !== "Manual") {
+        currentGroup = (currentGroup + 1) % 2;
+      }
     }
-
-    // Set lane to green
-    setLanePhases((prev) => {
-      const newPhases = [...prev];
-      newPhases[i] = 1; // 1 = green
-      return newPhases;
-    });
-
-    // Schedule transition to yellow
-    setTimeout(() => {
-      setLanePhases((prev) => {
-        const newPhases = [...prev];
-        newPhases[i] = 2; // 2 = yellow
-        return newPhases;
-      });
-    }, greenDuration);
-
-    // Schedule transition to red after yellow
-    setTimeout(() => {
-      setLanePhases((prev) => {
-        const newPhases = [...prev];
-        newPhases[i] = 0; // 0 = red
-        return newPhases;
-      });
-    }, greenDuration + 1500); // yellow lasts 1.5s
   };
 
-  // Run updateLane for each lane periodically
-  const interval = setInterval(() => camData.forEach((_, i) => updateLane(i)), 7000);
+  cycleController();
 
-  return () => clearInterval(interval);
-}, [camData, powerOn, signalsOn, phaseHold, flashMode, controlModeIndex, signalModeIndex, manualStepCount]);
+  return () => {
+    isRunning = false;
+  };
+}, [powerOn, signalsOn, phaseHold, flashMode, controlModeIndex, manualStepCount]);
 
-  // =================== FLASHING ===================
+
   useEffect(()=>{
     if(!flashMode) return;
     const flashInterval = setInterval(()=>setFlashOn(f=>!f),500);
