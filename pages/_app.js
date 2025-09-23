@@ -4,9 +4,11 @@ import MobileWarning from "../components/MobileWarning";
 import "leaflet/dist/leaflet.css";
 
 
+
 export default function App({ Component, pageProps }) {
   return (
     <>
+    
       {/* Custom Cursor (GSAP animated) */}
       <CustomCursor />
       <MobileWarning />

@@ -46,7 +46,7 @@ export default function Navbar({ user }) {
   }, [user]);
 
   const menuLinks = useMemo(() => [
-    { href: "/", label: "Dashboard" },
+    { href: "/user", label: "Dashboard" },
     { href: "/features&services/#services", label: "Smart Nav" },
     { href: "/features&services/#features", label: "Report Issue" },
     { href: "/rules&laws/#laws", label: "Alerts" },

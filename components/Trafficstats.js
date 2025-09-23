@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function generateStats() {
   const avgSpeed = +(Math.random() * 60 + 20).toFixed(1); // 20-80 km/h
@@ -8,7 +8,6 @@ function generateStats() {
   const jamCount = Math.floor(Math.random() * 50 + 20);
   const jamLength = +(Math.random() * 20 + 5).toFixed(1);
 
-  // sync values: if avg speed is low, congestion high, etc.
   const syncedCongestion = Math.min(Math.max(congestion, 10), 90);
   const syncedTravelTime = Math.round(travelTime * (1 + syncedCongestion / 100));
 
@@ -24,7 +23,15 @@ function generateStats() {
 }
 
 export default function TrafficStats({ city }) {
-  const [stats] = useState(generateStats()); // ✅ only runs once per mount
+  const [stats, setStats] = useState(null);
+
+  // Run only on client
+  useEffect(() => {
+    setStats(generateStats());
+  }, []);
+
+  // Render nothing until client stats are ready
+  if (!stats) return null;
 
   return (
     <div className="flex flex-col w-full font-poppins items-center">
@@ -70,7 +77,9 @@ export default function TrafficStats({ city }) {
           <div className="mb-4 font-semibold text-[14px]">Traffic jams</div>
           <div className="flex justify-between">
             <div className="text-3xl font-bold">{stats.jams.count}</div>
-            <div className="text-3xl font-bold">{stats.jams.length} <span className="text-sm">km</span></div>
+            <div className="text-3xl font-bold">
+              {stats.jams.length} <span className="text-sm">km</span>
+            </div>
           </div>
         </div>
       </div>

@@ -169,13 +169,7 @@ const Hero = ({ onSearch, mapRef }) => {
             )}
           </h1>
 
-          {/* ✅ Last updated time */}
-          {lastUpdated && (
-            <p className="text-gray-500 text-[14px] mb-4 font-poppins">
-              Last updated: {lastUpdated}
-            </p>
-          )}
-
+        
           <p className="text-gray-600 font-poppins text-[16px] tracking-[0.1px] max-w-5xl mx-auto">
             Real-time AI-powered traffic updates to help reduce congestion,
             optimize signals, and improve road safety.

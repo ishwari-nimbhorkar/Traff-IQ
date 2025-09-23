@@ -34,8 +34,7 @@ export default function Home() {
         {/* Main Content */}
         <main id="hero" className="text-black">
 <Hero /> 
-<India />
-<Driving />
+
     </main>
 
         {/* Footer */}
