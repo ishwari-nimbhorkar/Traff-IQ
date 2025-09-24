@@ -1,20 +1,31 @@
 "use client";
 import { Bar } from "react-chartjs-2";
+
 import {
   Chart as ChartJS,
-  BarElement,
-  LinearScale,
+  LineController, // ✅ Import this
+  LineElement,
   PointElement,
+  LinearScale,
   CategoryScale,
   Title,
   Tooltip,
   Legend,
-  LineElement
+  BarElement, // only if you use bar charts
 } from "chart.js";
 
-ChartJS.register(BarElement, LinearScale, CategoryScale, Title, Tooltip, Legend, PointElement,
-  LineElement);
-
+// Register chart components
+ChartJS.register(
+  LineController,
+  LineElement,
+  PointElement,
+  LinearScale,
+  CategoryScale,
+  Title,
+  Tooltip,
+  Legend,
+  BarElement // only if needed
+);
 const hours = Array.from({ length: 24 }, (_, i) => `${i}:00`);
 
 const trafficVolume = [

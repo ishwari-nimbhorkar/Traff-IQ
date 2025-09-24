@@ -31,14 +31,14 @@ body {
 /* Local fonts */
 @font-face {
   font-family: "cy-grotesk";
-  src: url("/fonts/buzan-cy-grotesk-grand-dark.ttf") format("truetype");
+  src: url("/public/fonts/buzan-cy-grotesk-grand-dark.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
 }
 
 @font-face {
   font-family: "cy-grotesk";
-  src: url("/fonts/cy-grotesk-wide.ttf") format("truetype");
+  src: url("/public/fonts/cy-grotesk-wide.ttf") format("truetype");
   font-weight: 700;
   font-style: normal;
 }
