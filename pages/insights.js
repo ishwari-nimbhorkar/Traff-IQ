@@ -3,6 +3,7 @@
 import React from 'react';
 import Navbar from '@/components/user-navbar';
 import Footer from '@/components/Footer';
+import Image from 'next/image';
 
 export default function InsightsPage() {
   return (
@@ -37,7 +38,7 @@ export default function InsightsPage() {
             <li><strong>Anomaly Detection:</strong> Identifies unusual trends in traffic, alerts, or user behavior.</li>
             <li><strong>Personalized Insights:</strong> Provides tailored insights for users, cities, or authorities based on usage patterns.</li>
             <li><strong>Performance Metrics:</strong> Tracks KPIs such as travel time, congestion hotspots, and alert response efficiency.</li>
-            <li><strong>Scenario Simulation:</strong> AI simulates "what-if" scenarios to predict impact of road closures or events.</li>
+            <li><strong>Scenario Simulation:</strong> AI simulates what-if scenarios to predict impact of road closures or events.</li>
             <li><strong>Automated Reporting:</strong> Generates PDF/Excel reports and visual summaries for decision-making.</li>
             <li><strong>Trend Analysis & Recommendations:</strong> Suggests improvements for routes, infrastructure, and service planning based on patterns.</li>
           </ul>
@@ -68,7 +69,7 @@ export default function InsightsPage() {
 
           {/* Image Placeholder */}
           <div className="mt-6 flex justify-center">
-            <img src="/images/insights-user-flow.png" alt="Insights User Flow Diagram" className="max-w-full h-auto rounded-lg shadow-md" />
+            <Image src="/images/insights-user-flow.png" alt="Insights User Flow Diagram" className="max-w-full h-auto rounded-lg shadow-md" />
           </div>
         </div>
 

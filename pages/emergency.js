@@ -3,6 +3,8 @@
 import React from 'react';
 import Navbar from '@/components/user-navbar';
 import Footer from '@/components/Footer';
+import Image from 'next/image';
+
 
 export default function EmergencyPage() {
   return (
@@ -68,7 +70,7 @@ export default function EmergencyPage() {
 
           {/* Image Placeholder */}
           <div className="mt-6 flex justify-center">
-            <img src="/images/emergency-user-flow.png" alt="Emergency User Flow Diagram" className="max-w-full h-auto rounded-lg shadow-md" />
+            <Image src="/images/emergency-user-flow.png" alt="Emergency User Flow Diagram" className="max-w-full h-auto rounded-lg shadow-md" />
           </div>
         </div>
 
