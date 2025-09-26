@@ -49,10 +49,10 @@ export default function Navbar({ user }) {
     { href: "/higherAuthority", label: "Dashboard" },
     { href: "/analytics", label: "Analytics" },
     { href: "/moniter&control", label: "Oversee" },
-    { href: "/", label: "IOT Hub" },
-    { href: "/", label: "Violation" },
-    { href: "/", label: "Emergency" },
-    { href: "/", label: "Zone" },
+    { href: "/iotHub", label: "IOT Hub" },
+    { href: "/violation", label: "Violation" },
+    { href: "/emergencyAuthority", label: "Emergency" },
+    { href: "/zone", label: "Zone" },
   ], []);
 
   const toggleMobileMenu = () => setIsMobileOpen(prev => !prev);

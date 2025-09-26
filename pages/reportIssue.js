@@ -66,10 +66,7 @@ export default function ReportIssuePage() {
             <li><strong>Feedback Collection:</strong> Users provide feedback on resolution quality and service efficiency.</li>
           </ul>
 
-          {/* Image Placeholder */}
-          <div className="mt-6 flex justify-center">
-            <Image src="/images/report-user-flow.png" alt="User Flow Diagram" className="max-w-full h-auto rounded-lg shadow-md" />
-          </div>
+         
         </div>
 
         {/* Expected Results / Benefits */}

@@ -3,7 +3,6 @@
 import React from 'react';
 import Navbar from '@/components/user-navbar';
 import Footer from '@/components/Footer';
-import Image from 'next/image';
 
 export default function AlertPage() {
   return (
@@ -67,11 +66,6 @@ export default function AlertPage() {
             <li><strong>Recommended Actions:</strong> AI suggests routes, detours, or safety measures based on alert type.</li>
             <li><strong>Feedback & Learning:</strong> User interactions feed back into AI to improve alert relevance and prediction accuracy.</li>
           </ul>
-
-          {/* Image Placeholder */}
-          <div className="mt-6 flex justify-center">
-            <Image src="/images/alert-user-flow.png" alt="Alert User Flow Diagram" className="max-w-full h-auto rounded-lg shadow-md" />
-          </div>
         </div>
 
         {/* Expected Results / Benefits */}

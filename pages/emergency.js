@@ -68,10 +68,7 @@ export default function EmergencyPage() {
             <li><strong>Incident Logging & Feedback:</strong> Logs incident details and feedback to improve AI detection accuracy.</li>
           </ul>
 
-          {/* Image Placeholder */}
-          <div className="mt-6 flex justify-center">
-            <Image src="/images/emergency-user-flow.png" alt="Emergency User Flow Diagram" className="max-w-full h-auto rounded-lg shadow-md" />
-          </div>
+  
         </div>
 
         {/* Expected Results / Benefits */}

@@ -67,10 +67,7 @@ export default function InsightsPage() {
             <li><strong>Feedback Loop:</strong> User interactions and feedback refine AI predictions and dashboards over time.</li>
           </ul>
 
-          {/* Image Placeholder */}
-          <div className="mt-6 flex justify-center">
-            <Image src="/images/insights-user-flow.png" alt="Insights User Flow Diagram" className="max-w-full h-auto rounded-lg shadow-md" />
-          </div>
+       
         </div>
 
         {/* Expected Results / Benefits */}

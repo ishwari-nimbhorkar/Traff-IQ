@@ -3,7 +3,6 @@
 import React from 'react';
 import Navbar from '@/components/user-navbar';
 import Footer from '@/components/Footer';
-import Image from 'next/image';
 
 export default function SmartNavPage() {
   return (
@@ -66,10 +65,7 @@ export default function SmartNavPage() {
           <li><strong>Trip Completion:</strong> System logs trip, updates AI model with actual travel time, and requests feedback on route accuracy and alert relevance.</li>
         </ul>
 
-        {/* Image Placeholder */}
-        <div className="mt-6 flex justify-center">
-          <Image src="/images/user-flow.png" alt="User Flow Diagram" className="max-w-full h-auto rounded-lg shadow-md" />
-        </div>
+        
       </div>
 
       {/* Expected Results / Benefits */}

@@ -3,7 +3,6 @@
 import React from 'react';
 import Navbar from '@/components/user-navbar';
 import Footer from '@/components/Footer';
-import Image from 'next/image';
 
 export default function CommunityPage() {
   return (
@@ -68,10 +67,7 @@ export default function CommunityPage() {
             <li><strong>Feedback Loop:</strong> User engagement and feedback refine AI recommendations and moderation.</li>
           </ul>
 
-          {/* Image Placeholder */}
-          <div className="mt-6 flex justify-center">
-            <Image src="/images/community-user-flow.png" alt="Community User Flow Diagram" className="max-w-full h-auto rounded-lg shadow-md" />
-          </div>
+         
         </div>
 
         {/* Expected Results / Benefits */}

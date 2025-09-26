@@ -10,7 +10,7 @@ const Hero = () => {
   // Redirect with search query
   const handleSearchClick = () => {
     if (!search) return;
-    router.push(`/dashboard?city=${encodeURIComponent(search)}`);
+    router.push(`/user`);
   };
 
   return (

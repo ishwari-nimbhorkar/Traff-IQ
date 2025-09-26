@@ -77,9 +77,9 @@ const Footer = () => {
           <div>
             <h3 className="font-semibold mb-4 text-white">Support & Integration</h3>
             <ul className="space-y-2 text-sm">
-              <li><Link href="/rules&laws/#laws" className="hover:underline">Law & Regulation</Link></li>
-              <li><Link href="/rules&laws/#rules" className="hover:underline">User & Role Management</Link></li>
-              <li><Link href="/essentials/#about" className="hover:underline">VIP Route Management</Link></li>
+              <li><Link href="/support&integration" className="hover:underline">Law & Regulation</Link></li>
+              <li><Link href="/support&integration" className="hover:underline">User & Role Management</Link></li>
+              <li><Link href="/support&integration" className="hover:underline">VIP Route Management</Link></li>
             </ul>
           </div>
         </div>
